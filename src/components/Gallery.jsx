@@ -84,31 +84,31 @@ export default function Gallery({ galleryImages = [] }) {
           {/* Close Button */}
           <button
             onClick={() => setActiveIndex(null)}
-            className="absolute top-6 right-6 p-2 bg-brand-gold/10 hover:bg-brand-gold/20 rounded-full text-brand-gold border border-brand-gold/20 transition-all cursor-pointer z-55"
+            className="absolute top-4 right-4 sm:top-6 sm:right-6 p-2 bg-brand-gold/10 hover:bg-brand-gold/20 rounded-full text-brand-gold border border-brand-gold/20 transition-all cursor-pointer z-55"
             title="Kapat"
           >
-            <X size={28} />
+            <X className="w-5 h-5 sm:w-7 sm:h-7" />
           </button>
 
           {/* Left Arrow */}
           <button
             onClick={handlePrev}
-            className="absolute left-4 sm:left-8 p-3 bg-brand-gold/10 hover:bg-brand-gold/20 rounded-full text-brand-gold border border-brand-gold/20 transition-all cursor-pointer z-55 hover:scale-110 active:scale-95"
+            className="absolute left-2 sm:left-8 p-2 sm:p-3 bg-brand-gold/10 hover:bg-brand-gold/20 rounded-full text-brand-gold border border-brand-gold/20 transition-all cursor-pointer z-55 hover:scale-110 active:scale-95"
             title="Önceki"
           >
-            <ChevronLeft size={32} />
+            <ChevronLeft className="w-6 h-6 sm:w-8 sm:h-8" />
           </button>
 
           {/* Image & Caption Container */}
           <div 
-            className="max-w-4xl w-full flex flex-col items-center px-12"
+            className="max-w-4xl w-full flex flex-col items-center px-4 sm:px-12"
             onClick={(e) => e.stopPropagation()} // Prevent closing modal when clicking details
           >
-            <div className="relative group max-h-[75vh]">
+            <div className="relative group max-h-[70vh] sm:max-h-[75vh]">
               <img
                 src={activeImage.url}
                 alt={activeImage.title}
-                className="max-h-[75vh] object-contain rounded-2xl border border-brand-gold/30 shadow-2xl transition-all duration-300"
+                className="max-h-[70vh] sm:max-h-[75vh] object-contain rounded-2xl border border-brand-gold/30 shadow-2xl transition-all duration-300"
               />
             </div>
             
@@ -125,10 +125,10 @@ export default function Gallery({ galleryImages = [] }) {
           {/* Right Arrow */}
           <button
             onClick={handleNext}
-            className="absolute right-4 sm:right-8 p-3 bg-brand-gold/10 hover:bg-brand-gold/20 rounded-full text-brand-gold border border-brand-gold/20 transition-all cursor-pointer z-55 hover:scale-110 active:scale-95"
+            className="absolute right-2 sm:right-8 p-2 sm:p-3 bg-brand-gold/10 hover:bg-brand-gold/20 rounded-full text-brand-gold border border-brand-gold/20 transition-all cursor-pointer z-55 hover:scale-110 active:scale-95"
             title="Sonraki"
           >
-            <ChevronRight size={32} />
+            <ChevronRight className="w-6 h-6 sm:w-8 sm:h-8" />
           </button>
         </div>
       )}

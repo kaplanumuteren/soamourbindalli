@@ -306,7 +306,7 @@ export default function Admin({
           
           <div className="text-center mt-6">
             <span className="text-[10px] text-brand-ivory/40 font-sans">
-              Varsayılan Şifre: <code className="bg-[#160B0E] px-1.5 py-0.5 rounded text-brand-gold">soamouradmin</code>
+              Varsayılan Şifre: <code className="bg-[#160B0E] px-1.5 py-0.5 rounded text-brand-gold">01030210</code>
             </span>
           </div>
         </div>
@@ -315,7 +315,7 @@ export default function Admin({
   }
 
   return (
-    <div className="pt-28 pb-24 bg-[#160B0E] min-h-screen text-left">
+    <div className="pt-36 md:pt-28 pb-24 bg-[#160B0E] min-h-screen text-left">
       {/* Admin Navbar */}
       <nav className="fixed top-0 left-0 w-full z-50 bg-[#160B0E]/95 backdrop-blur-md border-b border-brand-gold/20 shadow-lg py-3">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -375,20 +375,22 @@ export default function Admin({
             </div>
 
             {/* Right Side Actions */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3">
               <Link
                 to="/"
-                className="flex items-center gap-1.5 border border-brand-gold/30 hover:border-brand-gold text-brand-ivory hover:bg-brand-gold/10 font-sans font-semibold px-4 py-2 rounded-xl transition-all text-xs tracking-wider uppercase"
+                className="flex items-center gap-1.5 border border-brand-gold/30 hover:border-brand-gold text-brand-ivory hover:bg-brand-gold/10 font-sans font-semibold px-2.5 py-2 sm:px-4 rounded-xl transition-all text-xs tracking-wider uppercase"
+                title="Siteye Git"
               >
                 <ArrowLeft size={14} />
-                Siteye Git
+                <span className="hidden sm:inline">Siteye Git</span>
               </Link>
               <button
                 onClick={handleLogout}
-                className="flex items-center gap-1.5 border border-brand-burgundy bg-brand-burgundy/10 hover:bg-brand-burgundy text-brand-ivory font-sans font-semibold px-4 py-2 rounded-xl transition-all text-xs tracking-wider uppercase cursor-pointer"
+                className="flex items-center gap-1.5 border border-brand-burgundy bg-brand-burgundy/10 hover:bg-brand-burgundy text-brand-ivory font-sans font-semibold px-2.5 py-2 sm:px-4 rounded-xl transition-all text-xs tracking-wider uppercase cursor-pointer"
+                title="Çıkış"
               >
                 <LogOut size={14} />
-                Çıkış
+                <span className="hidden sm:inline">Çıkış</span>
               </button>
             </div>
           </div>
@@ -431,7 +433,7 @@ export default function Admin({
         </div>
       </nav>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 md:mt-0">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 md:mt-0">
 
         {/* ================= OVERVIEW TAB ================= */}
         {activeTab === "overview" && (
@@ -666,44 +668,44 @@ export default function Admin({
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start animate-fade-in-up">
             
             {/* Sidebar Subtabs */}
-            <div className="lg:col-span-3 bg-[#1c0e12] border border-brand-gold/10 rounded-2xl p-4 flex flex-col gap-2">
+            <div className="lg:col-span-3 bg-[#1c0e12] border border-brand-gold/10 rounded-2xl p-3 flex flex-row lg:flex-col overflow-x-auto lg:overflow-x-visible gap-2 shrink-0">
               <button
                 onClick={() => setActiveContentSubTab("hero")}
-                className={`w-full px-4 py-3 rounded-xl font-sans text-xs uppercase tracking-wider font-bold transition-all text-left flex justify-between items-center cursor-pointer ${
+                className={`px-4 py-3 rounded-xl font-sans text-xs uppercase tracking-wider font-bold transition-all text-left flex justify-between items-center gap-2 cursor-pointer whitespace-nowrap w-auto lg:w-full shrink-0 ${
                   activeContentSubTab === "hero"
                     ? "bg-brand-gold text-[#160B0E]"
                     : "text-brand-ivory/60 hover:bg-brand-gold/10 hover:text-brand-gold"
                 }`}
               >
                 <span>Karşılama Alanı (Hero)</span>
-                <ChevronRight size={14} />
+                <ChevronRight size={14} className="hidden lg:block" />
               </button>
               <button
                 onClick={() => setActiveContentSubTab("about")}
-                className={`w-full px-4 py-3 rounded-xl font-sans text-xs uppercase tracking-wider font-bold transition-all text-left flex justify-between items-center cursor-pointer ${
+                className={`px-4 py-3 rounded-xl font-sans text-xs uppercase tracking-wider font-bold transition-all text-left flex justify-between items-center gap-2 cursor-pointer whitespace-nowrap w-auto lg:w-full shrink-0 ${
                   activeContentSubTab === "about"
                     ? "bg-brand-gold text-[#160B0E]"
                     : "text-brand-ivory/60 hover:bg-brand-gold/10 hover:text-brand-gold"
                 }`}
               >
                 <span>Hakkımızda Alanı</span>
-                <ChevronRight size={14} />
+                <ChevronRight size={14} className="hidden lg:block" />
               </button>
               <button
                 onClick={() => setActiveContentSubTab("contact")}
-                className={`w-full px-4 py-3 rounded-xl font-sans text-xs uppercase tracking-wider font-bold transition-all text-left flex justify-between items-center cursor-pointer ${
+                className={`px-4 py-3 rounded-xl font-sans text-xs uppercase tracking-wider font-bold transition-all text-left flex justify-between items-center gap-2 cursor-pointer whitespace-nowrap w-auto lg:w-full shrink-0 ${
                   activeContentSubTab === "contact"
                     ? "bg-brand-gold text-[#160B0E]"
                     : "text-brand-ivory/60 hover:bg-brand-gold/10 hover:text-brand-gold"
                 }`}
               >
                 <span>İletişim & Randevu</span>
-                <ChevronRight size={14} />
+                <ChevronRight size={14} className="hidden lg:block" />
               </button>
             </div>
 
             {/* Subtab Content Form */}
-            <div className="lg:col-span-9 bg-[#1c0e12] border border-brand-gold/15 p-8 rounded-3xl shadow-xl">
+            <div className="lg:col-span-9 bg-[#1c0e12] border border-brand-gold/15 p-5 sm:p-8 rounded-3xl shadow-xl">
               <form onSubmit={handleSavePageSettings} className="space-y-6">
                 
                 {/* HERO SUBTAB */}
