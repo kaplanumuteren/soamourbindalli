@@ -1,6 +1,7 @@
 import { Star, ShieldCheck, Heart, Award, ArrowRight } from "lucide-react";
 import Hero from "../components/Hero";
 import Gallery from "../components/Gallery";
+import Testimonials from "../components/Testimonials";
 import { Link } from "react-router-dom";
 
 export default function Home({ homeSettings, galleryImages }) {
@@ -154,6 +155,8 @@ export default function Home({ homeSettings, galleryImages }) {
           </div>
         </div>
       </section>
+
+      <Testimonials />
 
       <Gallery galleryImages={galleryImages} />
     </div>
