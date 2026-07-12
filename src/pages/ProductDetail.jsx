@@ -1,9 +1,8 @@
 import { useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { products } from "../data/products";
 import { ArrowLeft, MessageSquare, Shield, Clock, Scissors, Award } from "lucide-react";
 
-export default function ProductDetail() {
+export default function ProductDetail({ products }) {
   const { id } = useParams();
   const product = products.find((p) => p.id === parseInt(id));
 

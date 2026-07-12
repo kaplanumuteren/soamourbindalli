@@ -140,6 +140,7 @@ export default function Footer() {
           <div className="flex gap-6 font-sans text-brand-ivory/40 text-xs">
             <a href="#" className="hover:text-brand-gold transition-colors">Gizlilik Politikası</a>
             <a href="#" className="hover:text-brand-gold transition-colors">Kullanım Şartları</a>
+            <Link to="/admin" className="hover:text-brand-gold transition-colors text-brand-gold/60 font-semibold">Yönetici Girişi</Link>
           </div>
           <button
             onClick={scrollToTop}

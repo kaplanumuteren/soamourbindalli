@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
 import ProductCard from "../components/ProductCard";
-import { products } from "../data/products";
 import { Search } from "lucide-react";
 
-export default function Collection() {
+export default function Collection({ products }) {
   const [filter, setFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
 
