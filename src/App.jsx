@@ -115,7 +115,7 @@ function App() {
 
   // 3. Homepage Settings State
   const [homeSettings, setHomeSettings] = useState(() => {
-    const saved = localStorage.getItem("soamour_home_settings");
+    const saved = localStorage.getItem("soamour_home_settings_v3");
     if (saved) {
       try {
         return { ...defaultHomeSettings, ...JSON.parse(saved) };
@@ -128,12 +128,12 @@ function App() {
 
   const handleUpdateHomeSettings = (newSettings) => {
     setHomeSettings(newSettings);
-    localStorage.setItem("soamour_home_settings", JSON.stringify(newSettings));
+    localStorage.setItem("soamour_home_settings_v3", JSON.stringify(newSettings));
   };
 
   // 4. Contact Settings State
   const [contactSettings, setContactSettings] = useState(() => {
-    const saved = localStorage.getItem("soamour_contact_settings");
+    const saved = localStorage.getItem("soamour_contact_settings_v3");
     if (saved) {
       try {
         return { ...defaultContactSettings, ...JSON.parse(saved) };
@@ -146,7 +146,7 @@ function App() {
 
   const handleUpdateContactSettings = (newSettings) => {
     setContactSettings(newSettings);
-    localStorage.setItem("soamour_contact_settings", JSON.stringify(newSettings));
+    localStorage.setItem("soamour_contact_settings_v3", JSON.stringify(newSettings));
   };
 
   return (
