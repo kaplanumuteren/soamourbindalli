@@ -27,7 +27,7 @@ export default function ProductDetail({ products, contactSettings }) {
     );
   }
 
-  const { name, category, type, priceRental, priceSale, description, image, features } = product;
+  const { name, category, type, description, image, features } = product;
 
   const formatCategory = (cat) => {
     switch (cat) {
@@ -134,35 +134,16 @@ export default function ProductDetail({ products, contactSettings }) {
               )}
             </div>
 
-            {/* Pricing Card & WhatsApp Action */}
+            {/* WhatsApp Action */}
             <div className="bg-[#160B0E]/40 border border-brand-gold/15 rounded-3xl p-6 sm:p-8 shadow-xl mt-auto">
-              <div className="flex items-center justify-between gap-6 mb-8 border-b border-brand-gold/10 pb-6">
-                {priceRental && (
-                  <div>
-                    <span className="block text-[10px] font-sans uppercase tracking-wider text-brand-ivory/40">Kiralama Fiyatı</span>
-                    <span className="font-sans text-brand-gold font-bold text-2xl sm:text-3xl">
-                      {priceRental.toLocaleString("tr-TR")} ₺
-                    </span>
-                  </div>
-                )}
-                {priceSale && (
-                  <div>
-                    <span className="block text-[10px] font-sans uppercase tracking-wider text-brand-ivory/40">Satın Alma Fiyatı</span>
-                    <span className="font-sans text-brand-ivory font-bold text-2xl sm:text-3xl">
-                      {priceSale.toLocaleString("tr-TR")} ₺
-                    </span>
-                  </div>
-                )}
-              </div>
-
               <a
                 href={`https://wa.me/${contactSettings?.whatsapp || "905000000000"}?text=${encodeURIComponent(whatsappMessage)}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-brand-gold to-brand-gold-dark hover:from-brand-gold-light hover:to-brand-gold text-[#160B0E] font-sans font-bold py-4 rounded-xl shadow-lg hover:scale-[1.02] transition-all text-sm tracking-wider uppercase"
+                className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-brand-gold to-brand-gold-dark hover:from-brand-gold-light hover:to-brand-gold text-[#160B0E] font-sans font-bold py-4 rounded-xl shadow-lg hover:scale-[1.02] transition-all text-sm tracking-wider uppercase cursor-pointer"
               >
                 <MessageSquare size={18} />
-                WhatsApp ile Sipariş & Randevu İste
+                WhatsApp ile Sipariş & Bilgi Al
               </a>
             </div>
           </div>

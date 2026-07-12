@@ -36,8 +36,6 @@ export default function Admin({
     name: "",
     category: "kaftan",
     type: "rental-sale",
-    priceRental: "",
-    priceSale: "",
     description: "",
     image: "",
     features: ""
@@ -125,8 +123,6 @@ export default function Admin({
       name: "",
       category: "kaftan",
       type: "rental-sale",
-      priceRental: "",
-      priceSale: "",
       description: "",
       image: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=600&q=80",
       features: ""
@@ -140,8 +136,6 @@ export default function Admin({
       name: product.name,
       category: product.category,
       type: product.type,
-      priceRental: product.priceRental || "",
-      priceSale: product.priceSale || "",
       description: product.description || "",
       image: product.image || "",
       features: product.features ? product.features.join(", ") : ""
@@ -171,8 +165,6 @@ export default function Admin({
       name: productFields.name,
       category: productFields.category,
       type: productFields.type,
-      priceRental: productFields.priceRental ? parseInt(productFields.priceRental) : null,
-      priceSale: productFields.priceSale ? parseInt(productFields.priceSale) : null,
       description: productFields.description,
       image: productFields.image,
       features: formattedFeatures
@@ -556,8 +548,6 @@ export default function Admin({
                     <tr>
                       <th className="px-6 py-4">Ürün</th>
                       <th className="px-6 py-4">Kategori</th>
-                      <th className="px-6 py-4">Kiralık Fiyatı</th>
-                      <th className="px-6 py-4">Satılık Fiyatı</th>
                       <th className="px-6 py-4 text-right">İşlemler</th>
                     </tr>
                   </thead>
@@ -581,12 +571,7 @@ export default function Admin({
                               : "Aksesuar"}
                           </span>
                         </td>
-                        <td className="px-6 py-4 font-semibold text-brand-gold">
-                          {p.priceRental ? `${p.priceRental.toLocaleString("tr-TR")} ₺` : "-"}
-                        </td>
-                        <td className="px-6 py-4 font-semibold">
-                          {p.priceSale ? `${p.priceSale.toLocaleString("tr-TR")} ₺` : "-"}
-                        </td>
+
                         <td className="px-6 py-4 text-right">
                           <div className="inline-flex gap-2">
                             <button
@@ -992,31 +977,7 @@ export default function Admin({
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                <div>
-                  <label className="block text-xs font-sans uppercase tracking-widest text-brand-gold mb-2">Kiralama Fiyatı (₺)</label>
-                  <input
-                    type="number"
-                    disabled={productFields.type === "sale"}
-                    value={productFields.priceRental}
-                    onChange={(e) => setProductFields((prev) => ({ ...prev, priceRental: e.target.value }))}
-                    placeholder="Örn. 4500 (Boş bırakabilirsiniz)"
-                    className="w-full bg-[#160B0E]/60 border border-brand-gold/20 focus:border-brand-gold rounded-xl py-3 px-4 text-brand-ivory font-sans focus:outline-none transition-all disabled:opacity-30"
-                  />
-                </div>
 
-                <div>
-                  <label className="block text-xs font-sans uppercase tracking-widest text-brand-gold mb-2">Satın Alma Fiyatı (₺)</label>
-                  <input
-                    type="number"
-                    disabled={productFields.type === "rental"}
-                    value={productFields.priceSale}
-                    onChange={(e) => setProductFields((prev) => ({ ...prev, priceSale: e.target.value }))}
-                    placeholder="Örn. 12000 (Boş bırakabilirsiniz)"
-                    className="w-full bg-[#160B0E]/60 border border-brand-gold/20 focus:border-brand-gold rounded-xl py-3 px-4 text-brand-ivory font-sans focus:outline-none transition-all disabled:opacity-30"
-                  />
-                </div>
-              </div>
 
               <div>
                 <label className="block text-xs font-sans uppercase tracking-widest text-brand-gold mb-2">Ürün Özellikleri (Virgülle Ayırın)</label>

@@ -2,7 +2,7 @@ import { ShoppingBag, Eye } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export default function ProductCard({ product }) {
-  const { id, name, category, type, priceRental, priceSale, image } = product;
+  const { id, name, category, type, image } = product;
 
   // Format category name for Turkish user-facing UI
   const formatCategory = (cat) => {
@@ -37,15 +37,13 @@ export default function ProductCard({ product }) {
           >
             <Eye size={20} />
           </Link>
-          <a
-            href={`https://wa.me/905000000000?text=Merhaba,%20"${name}"%20modeliniz%20hakkında%20detaylı%20bilgi%20ve%20fiyat%20almak%20istiyorum.`}
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            to={`/urun/${id}`}
             className="p-3 bg-brand-burgundy text-brand-ivory border border-brand-gold/30 rounded-full hover:bg-brand-burgundy-light hover:scale-110 transition-all shadow-lg cursor-pointer"
-            title="WhatsApp ile Sor"
+            title="Bilgi Al"
           >
             <ShoppingBag size={20} />
-          </a>
+          </Link>
         </div>
 
         {/* Badges */}
@@ -73,29 +71,9 @@ export default function ProductCard({ product }) {
         <span className="text-xs font-sans uppercase tracking-[0.2em] text-brand-gold/80 mb-2">
           {formatCategory(category)}
         </span>
-        <h3 className="font-serif text-lg sm:text-xl font-semibold text-brand-ivory hover:text-brand-gold transition-colors duration-300 mb-3 line-clamp-1">
+        <h3 className="font-serif text-lg sm:text-xl font-semibold text-brand-ivory hover:text-brand-gold transition-colors duration-300 line-clamp-2">
           <Link to={`/urun/${id}`}>{name}</Link>
         </h3>
-
-        {/* Pricing */}
-        <div className="mt-auto pt-4 border-t border-brand-gold/10 flex flex-wrap items-baseline gap-x-4 gap-y-1">
-          {priceRental && (
-            <div className="flex flex-col">
-              <span className="text-[10px] font-sans uppercase tracking-wider text-brand-ivory/40">Kiralık</span>
-              <span className="font-sans text-brand-gold font-bold text-lg">
-                {priceRental.toLocaleString("tr-TR")} ₺
-              </span>
-            </div>
-          )}
-          {priceSale && (
-            <div className="flex flex-col">
-              <span className="text-[10px] font-sans uppercase tracking-wider text-brand-ivory/40">Satılık</span>
-              <span className="font-sans text-brand-ivory font-bold text-lg">
-                {priceSale.toLocaleString("tr-TR")} ₺
-              </span>
-            </div>
-          )}
-        </div>
       </div>
     </div>
   );
