@@ -100,7 +100,7 @@ export default function Admin({
   // Handle Login
   const handleLogin = (e) => {
     e.preventDefault();
-    if (username === "admin" && password === "soamouradmin") {
+    if (username === "admin" && password === "01030210") {
       setIsLoggedIn(true);
       sessionStorage.setItem("admin_logged_in", "true");
       setLoginError("");
