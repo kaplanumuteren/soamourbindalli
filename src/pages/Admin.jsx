@@ -2,8 +2,9 @@ import { useState, useEffect } from "react";
 import { 
   Plus, Edit2, Trash2, LogOut, Package, Grid, Image as ImageIcon,
   List, ShieldAlert, Sparkles, Save, X, Settings, Phone, MapPin, 
-  Clock, Info, FileText, ChevronRight
+  Clock, Info, FileText, ChevronRight, ArrowLeft
 } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function Admin({ 
   products, onUpdateProducts, 
@@ -330,74 +331,122 @@ export default function Admin({
 
   return (
     <div className="pt-28 pb-24 bg-[#160B0E] min-h-screen text-left">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        {/* Header Block */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-brand-gold/10 pb-6 mb-8 gap-4">
-          <div>
-            <span className="text-brand-gold text-sm font-sans uppercase tracking-[0.2em] font-semibold">
-              KONTROL PANELİ
-            </span>
-            <h1 className="font-serif text-3xl sm:text-4xl font-bold text-brand-ivory mt-1">
-              Yönetici Paneli
-            </h1>
+      {/* Admin Navbar */}
+      <nav className="fixed top-0 left-0 w-full z-50 bg-[#160B0E]/95 backdrop-blur-md border-b border-brand-gold/20 shadow-lg py-3">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            {/* Logo */}
+            <div className="flex-shrink-0 flex flex-col">
+              <Link to="/" className="font-serif text-2xl font-bold tracking-wide text-brand-gold hover:text-brand-gold-light transition-colors">
+                SO AMOUR
+              </Link>
+              <span className="font-sans text-[9px] uppercase tracking-[0.3em] text-brand-ivory/80 -mt-1">
+                Yönetici Paneli
+              </span>
+            </div>
+
+            {/* Desktop Navigation Tabs */}
+            <div className="hidden md:flex items-center space-x-6">
+              <button
+                onClick={() => setActiveTab("overview")}
+                className={`px-4 py-2 font-sans font-semibold text-xs uppercase tracking-wider cursor-pointer transition-all ${
+                  activeTab === "overview"
+                    ? "text-brand-gold border-b-2 border-brand-gold pb-1"
+                    : "text-brand-ivory hover:text-brand-gold"
+                }`}
+              >
+                Genel Bakış
+              </button>
+              <button
+                onClick={() => setActiveTab("products")}
+                className={`px-4 py-2 font-sans font-semibold text-xs uppercase tracking-wider cursor-pointer transition-all ${
+                  activeTab === "products"
+                    ? "text-brand-gold border-b-2 border-brand-gold pb-1"
+                    : "text-brand-ivory hover:text-brand-gold"
+                }`}
+              >
+                Ürün Yönetimi
+              </button>
+              <button
+                onClick={() => setActiveTab("gallery")}
+                className={`px-4 py-2 font-sans font-semibold text-xs uppercase tracking-wider cursor-pointer transition-all ${
+                  activeTab === "gallery"
+                    ? "text-brand-gold border-b-2 border-brand-gold pb-1"
+                    : "text-brand-ivory hover:text-brand-gold"
+                }`}
+              >
+                Galeri Yönetimi
+              </button>
+              <button
+                onClick={() => setActiveTab("content")}
+                className={`px-4 py-2 font-sans font-semibold text-xs uppercase tracking-wider cursor-pointer transition-all ${
+                  activeTab === "content"
+                    ? "text-brand-gold border-b-2 border-brand-gold pb-1"
+                    : "text-brand-ivory hover:text-brand-gold"
+                }`}
+              >
+                İçerik Düzenleme
+              </button>
+            </div>
+
+            {/* Right Side Actions */}
+            <div className="flex items-center gap-3">
+              <Link
+                to="/"
+                className="flex items-center gap-1.5 border border-brand-gold/30 hover:border-brand-gold text-brand-ivory hover:bg-brand-gold/10 font-sans font-semibold px-4 py-2 rounded-xl transition-all text-xs tracking-wider uppercase"
+              >
+                <ArrowLeft size={14} />
+                Siteye Git
+              </Link>
+              <button
+                onClick={handleLogout}
+                className="flex items-center gap-1.5 border border-brand-burgundy bg-brand-burgundy/10 hover:bg-brand-burgundy text-brand-ivory font-sans font-semibold px-4 py-2 rounded-xl transition-all text-xs tracking-wider uppercase cursor-pointer"
+              >
+                <LogOut size={14} />
+                Çıkış
+              </button>
+            </div>
           </div>
-          <button
-            onClick={handleLogout}
-            className="flex items-center gap-2 border border-brand-burgundy text-brand-ivory hover:bg-brand-burgundy hover:text-brand-ivory font-sans font-semibold px-4 py-2.5 rounded-xl transition-all text-xs tracking-wider uppercase cursor-pointer"
-          >
-            <LogOut size={14} />
-            Güvenli Çıkış
-          </button>
         </div>
 
-        {/* Tab Headers */}
-        <div className="flex flex-wrap border-b border-brand-gold/10 mb-8">
+        {/* Mobile Navigation Tabs */}
+        <div className="md:hidden border-t border-brand-gold/10 mt-3 pt-2 flex justify-around text-center">
           <button
             onClick={() => setActiveTab("overview")}
-            className={`px-6 py-3 font-sans font-semibold text-sm tracking-wide border-b-2 cursor-pointer transition-all flex items-center gap-2 ${
-              activeTab === "overview"
-                ? "border-brand-gold text-brand-gold"
-                : "border-transparent text-brand-ivory/60 hover:text-brand-gold"
+            className={`py-2 text-[10px] font-sans font-bold uppercase tracking-wider ${
+              activeTab === "overview" ? "text-brand-gold" : "text-brand-ivory/60"
             }`}
           >
-            <Grid size={16} />
             Genel Bakış
           </button>
           <button
             onClick={() => setActiveTab("products")}
-            className={`px-6 py-3 font-sans font-semibold text-sm tracking-wide border-b-2 cursor-pointer transition-all flex items-center gap-2 ${
-              activeTab === "products"
-                ? "border-brand-gold text-brand-gold"
-                : "border-transparent text-brand-ivory/60 hover:text-brand-gold"
+            className={`py-2 text-[10px] font-sans font-bold uppercase tracking-wider ${
+              activeTab === "products" ? "text-brand-gold" : "text-brand-ivory/60"
             }`}
           >
-            <Package size={16} />
-            Ürün Yönetimi
+            Ürünler
           </button>
           <button
             onClick={() => setActiveTab("gallery")}
-            className={`px-6 py-3 font-sans font-semibold text-sm tracking-wide border-b-2 cursor-pointer transition-all flex items-center gap-2 ${
-              activeTab === "gallery"
-                ? "border-brand-gold text-brand-gold"
-                : "border-transparent text-brand-ivory/60 hover:text-brand-gold"
+            className={`py-2 text-[10px] font-sans font-bold uppercase tracking-wider ${
+              activeTab === "gallery" ? "text-brand-gold" : "text-brand-ivory/60"
             }`}
           >
-            <ImageIcon size={16} />
-            Galeri Yönetimi
+            Galeri
           </button>
           <button
             onClick={() => setActiveTab("content")}
-            className={`px-6 py-3 font-sans font-semibold text-sm tracking-wide border-b-2 cursor-pointer transition-all flex items-center gap-2 ${
-              activeTab === "content"
-                ? "border-brand-gold text-brand-gold"
-                : "border-transparent text-brand-ivory/60 hover:text-brand-gold"
+            className={`py-2 text-[10px] font-sans font-bold uppercase tracking-wider ${
+              activeTab === "content" ? "text-brand-gold" : "text-brand-ivory/60"
             }`}
           >
-            <Settings size={16} />
-            İçerik Düzenleme
+            İçerik
           </button>
         </div>
+      </nav>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 md:mt-0">
 
         {/* ================= OVERVIEW TAB ================= */}
         {activeTab === "overview" && (

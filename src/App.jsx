@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import FloatingActions from "./components/FloatingActions";
@@ -16,6 +16,65 @@ import Admin from "./pages/Admin";
 import { products } from "./data/products";
 import { galleryImages } from "./data/galleryData";
 import { defaultHomeSettings, defaultContactSettings } from "./data/defaultSettings";
+
+function AppContent({
+  productsList, handleUpdateProducts,
+  galleryList, handleUpdateGallery,
+  homeSettings, handleUpdateHomeSettings,
+  contactSettings, handleUpdateContactSettings
+}) {
+  const location = useLocation();
+  const isAdminPage = location.pathname === "/admin";
+
+  return (
+    <div className="bg-[#160B0E] text-brand-ivory min-h-screen selection:bg-brand-gold selection:text-[#160B0E] overflow-x-hidden font-sans flex flex-col justify-between">
+      <div>
+        {!isAdminPage && <Navbar contactSettings={contactSettings} />}
+        
+        <Routes>
+          <Route 
+            path="/" 
+            element={<Home homeSettings={homeSettings} galleryImages={galleryList} />} 
+          />
+          <Route 
+            path="/koleksiyon" 
+            element={<Collection products={productsList} />} 
+          />
+          <Route 
+            path="/urun/:id" 
+            element={<ProductDetail products={productsList} contactSettings={contactSettings} />} 
+          />
+          <Route 
+            path="/galeri" 
+            element={<GalleryPage galleryImages={galleryList} />} 
+          />
+          <Route 
+            path="/iletisim" 
+            element={<Contact contactSettings={contactSettings} />} 
+          />
+          <Route 
+            path="/admin" 
+            element={
+              <Admin 
+                products={productsList} 
+                onUpdateProducts={handleUpdateProducts}
+                gallery={galleryList}
+                onUpdateGallery={handleUpdateGallery}
+                homeSettings={homeSettings}
+                onUpdateHomeSettings={handleUpdateHomeSettings}
+                contactSettings={contactSettings}
+                onUpdateContactSettings={handleUpdateContactSettings}
+              />
+            } 
+          />
+        </Routes>
+      </div>
+      
+      {!isAdminPage && <Footer />}
+      {!isAdminPage && <FloatingActions contactSettings={contactSettings} />}
+    </div>
+  );
+}
 
 function App() {
   // 1. Products State
@@ -92,52 +151,16 @@ function App() {
 
   return (
     <Router>
-      <div className="bg-[#160B0E] text-brand-ivory min-h-screen selection:bg-brand-gold selection:text-[#160B0E] overflow-x-hidden font-sans flex flex-col justify-between">
-        <div>
-          <Navbar contactSettings={contactSettings} />
-          
-          <Routes>
-            <Route 
-              path="/" 
-              element={<Home homeSettings={homeSettings} galleryImages={galleryList} />} 
-            />
-            <Route 
-              path="/koleksiyon" 
-              element={<Collection products={productsList} />} 
-            />
-            <Route 
-              path="/urun/:id" 
-              element={<ProductDetail products={productsList} contactSettings={contactSettings} />} 
-            />
-            <Route 
-              path="/galeri" 
-              element={<GalleryPage galleryImages={galleryList} />} 
-            />
-            <Route 
-              path="/iletisim" 
-              element={<Contact contactSettings={contactSettings} />} 
-            />
-            <Route 
-              path="/admin" 
-              element={
-                <Admin 
-                  products={productsList} 
-                  onUpdateProducts={handleUpdateProducts}
-                  gallery={galleryList}
-                  onUpdateGallery={handleUpdateGallery}
-                  homeSettings={homeSettings}
-                  onUpdateHomeSettings={handleUpdateHomeSettings}
-                  contactSettings={contactSettings}
-                  onUpdateContactSettings={handleUpdateContactSettings}
-                />
-              } 
-            />
-          </Routes>
-        </div>
-        
-        <Footer />
-        <FloatingActions contactSettings={contactSettings} />
-      </div>
+      <AppContent 
+        productsList={productsList}
+        handleUpdateProducts={handleUpdateProducts}
+        galleryList={galleryList}
+        handleUpdateGallery={handleUpdateGallery}
+        homeSettings={homeSettings}
+        handleUpdateHomeSettings={handleUpdateHomeSettings}
+        contactSettings={contactSettings}
+        handleUpdateContactSettings={handleUpdateContactSettings}
+      />
     </Router>
   );
 }
