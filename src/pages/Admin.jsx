@@ -7,8 +7,8 @@ import {
 import { Link } from "react-router-dom";
 
 export default function Admin({ 
-  products, onUpdateProducts, 
-  gallery, onUpdateGallery,
+  products, onAddProduct, onUpdateProduct, onDeleteProduct,
+  gallery, onAddGallery, onUpdateGallery, onDeleteGallery,
   homeSettings, onUpdateHomeSettings,
   contactSettings, onUpdateContactSettings
 }) {
@@ -145,8 +145,7 @@ export default function Admin({
 
   const handleDeleteProductClick = (id) => {
     if (window.confirm("Bu ürünü silmek istediğinize emin misiniz?")) {
-      const updated = products.filter((p) => p.id !== id);
-      onUpdateProducts(updated);
+      onDeleteProduct(id);
     }
   };
 
@@ -171,12 +170,9 @@ export default function Admin({
     };
 
     if (editingProduct) {
-      const updated = products.map((p) => p.id === editingProduct.id ? { ...p, ...productData } : p);
-      onUpdateProducts(updated);
+      onUpdateProduct({ id: editingProduct.id, ...productData });
     } else {
-      const newId = products.length > 0 ? Math.max(...products.map((p) => p.id)) + 1 : 1;
-      const updated = [...products, { id: newId, ...productData }];
-      onUpdateProducts(updated);
+      onAddProduct(productData);
     }
 
     setShowProductModal(false);
@@ -208,8 +204,7 @@ export default function Admin({
 
   const handleDeleteGalleryClick = (id) => {
     if (window.confirm("Bu galeri görselini silmek istediğinize emin misiniz?")) {
-      const updated = gallery.filter((item) => item.id !== id);
-      onUpdateGallery(updated);
+      onDeleteGallery(id);
     }
   };
 
@@ -227,12 +222,9 @@ export default function Admin({
     };
 
     if (editingGallery) {
-      const updated = gallery.map((item) => item.id === editingGallery.id ? { ...item, ...itemData } : item);
-      onUpdateGallery(updated);
+      onUpdateGallery({ id: editingGallery.id, ...itemData });
     } else {
-      const newId = gallery.length > 0 ? Math.max(...gallery.map((item) => item.id)) + 1 : 1;
-      const updated = [...gallery, { id: newId, ...itemData }];
-      onUpdateGallery(updated);
+      onAddGallery(itemData);
     }
 
     setShowGalleryModal(false);

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -12,19 +12,42 @@ import GalleryPage from "./pages/GalleryPage";
 import Contact from "./pages/Contact";
 import Admin from "./pages/Admin";
 
+// Supabase Client
+import { supabase } from "./supabaseClient";
+
 // Data & Settings Defaults
 import { products } from "./data/products";
 import { galleryImages } from "./data/galleryData";
 import { defaultHomeSettings, defaultContactSettings } from "./data/defaultSettings";
 
 function AppContent({
-  productsList, handleUpdateProducts,
-  galleryList, handleUpdateGallery,
-  homeSettings, handleUpdateHomeSettings,
-  contactSettings, handleUpdateContactSettings
+  productsList,
+  galleryList,
+  homeSettings,
+  contactSettings,
+  onAddProduct,
+  onUpdateProduct,
+  onDeleteProduct,
+  onAddGallery,
+  onUpdateGallery,
+  onDeleteGallery,
+  onUpdateHomeSettings,
+  onUpdateContactSettings,
+  isLoading
 }) {
   const location = useLocation();
   const isAdminPage = location.pathname === "/admin";
+
+  if (isLoading && !isAdminPage) {
+    return (
+      <div className="bg-[#160B0E] text-brand-ivory min-h-screen flex items-center justify-center font-serif text-2xl tracking-widest uppercase">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-10 h-10 border-4 border-brand-gold border-t-transparent rounded-full animate-spin"></div>
+          <span className="text-brand-gold text-sm font-sans font-bold tracking-[0.2em]">Yükleniyor...</span>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-[#160B0E] text-brand-ivory min-h-screen selection:bg-brand-gold selection:text-[#160B0E] overflow-x-hidden font-sans flex flex-col justify-between">
@@ -57,13 +80,17 @@ function AppContent({
             element={
               <Admin 
                 products={productsList} 
-                onUpdateProducts={handleUpdateProducts}
+                onAddProduct={onAddProduct}
+                onUpdateProduct={onUpdateProduct}
+                onDeleteProduct={onDeleteProduct}
                 gallery={galleryList}
-                onUpdateGallery={handleUpdateGallery}
+                onAddGallery={onAddGallery}
+                onUpdateGallery={onUpdateGallery}
+                onDeleteGallery={onDeleteGallery}
                 homeSettings={homeSettings}
-                onUpdateHomeSettings={handleUpdateHomeSettings}
+                onUpdateHomeSettings={onUpdateHomeSettings}
                 contactSettings={contactSettings}
-                onUpdateContactSettings={handleUpdateContactSettings}
+                onUpdateContactSettings={onUpdateContactSettings}
               />
             } 
           />
@@ -77,89 +104,279 @@ function AppContent({
 }
 
 function App() {
-  // 1. Products State
-  const [productsList, setProductsList] = useState(() => {
-    const saved = localStorage.getItem("soamour_products");
-    if (saved) {
-      try {
-        return JSON.parse(saved);
-      } catch (e) {
-        console.error("Error parsing saved products:", e);
-      }
-    }
-    return products;
-  });
+  const [productsList, setProductsList] = useState([]);
+  const [galleryList, setGalleryList] = useState([]);
+  const [homeSettings, setHomeSettings] = useState(defaultHomeSettings);
+  const [contactSettings, setContactSettings] = useState(defaultContactSettings);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const handleUpdateProducts = (newList) => {
-    setProductsList(newList);
-    localStorage.setItem("soamour_products", JSON.stringify(newList));
+  // Fetch and Sync Supabase Data
+  useEffect(() => {
+    const initApp = async () => {
+      try {
+        setIsLoading(true);
+        await Promise.all([
+          fetchProducts(),
+          fetchGallery(),
+          fetchSettings()
+        ]);
+      } catch (err) {
+        console.error("Initialization error:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    initApp();
+  }, []);
+
+  // 1. Fetch Products
+  const fetchProducts = async () => {
+    const { data, error } = await supabase
+      .from("products")
+      .select("*")
+      .order("id", { ascending: true });
+    
+    if (error) {
+      console.error("Error fetching products:", error);
+      return;
+    }
+
+    if (data && data.length > 0) {
+      setProductsList(data);
+    } else {
+      // Seed default products
+      const { data: inserted, error: insertErr } = await supabase
+        .from("products")
+        .insert(products)
+        .select();
+      
+      if (insertErr) console.error("Error seeding products:", insertErr);
+      else if (inserted) setProductsList(inserted);
+    }
   };
 
-  // 2. Gallery State
-  const [galleryList, setGalleryList] = useState(() => {
-    const saved = localStorage.getItem("soamour_gallery");
-    if (saved) {
-      try {
-        return JSON.parse(saved);
-      } catch (e) {
-        console.error("Error parsing saved gallery:", e);
+  // 2. Fetch Gallery
+  const fetchGallery = async () => {
+    const { data, error } = await supabase
+      .from("gallery")
+      .select("*")
+      .order("id", { ascending: true });
+    
+    if (error) {
+      console.error("Error fetching gallery:", error);
+      return;
+    }
+
+    if (data && data.length > 0) {
+      const formatted = data.map(item => ({
+        id: item.id,
+        title: item.title,
+        desc: item.description,
+        url: item.url
+      }));
+      setGalleryList(formatted);
+    } else {
+      // Seed default gallery
+      const mappedDefaults = galleryImages.map(item => ({
+        title: item.title,
+        description: item.desc,
+        url: item.url
+      }));
+      
+      const { data: inserted, error: insertErr } = await supabase
+        .from("gallery")
+        .insert(mappedDefaults)
+        .select();
+      
+      if (insertErr) console.error("Error seeding gallery:", insertErr);
+      else if (inserted) {
+        const formatted = inserted.map(item => ({
+          id: item.id,
+          title: item.title,
+          desc: item.description,
+          url: item.url
+        }));
+        setGalleryList(formatted);
       }
     }
-    return galleryImages;
-  });
-
-  const handleUpdateGallery = (newList) => {
-    setGalleryList(newList);
-    localStorage.setItem("soamour_gallery", JSON.stringify(newList));
   };
 
-  // 3. Homepage Settings State
-  const [homeSettings, setHomeSettings] = useState(() => {
-    const saved = localStorage.getItem("soamour_home_settings_v3");
-    if (saved) {
-      try {
-        return { ...defaultHomeSettings, ...JSON.parse(saved) };
-      } catch (e) {
-        console.error("Error parsing home settings:", e);
-      }
+  // 3. Fetch Settings
+  const fetchSettings = async () => {
+    const { data, error } = await supabase
+      .from("settings")
+      .select("*");
+    
+    if (error) {
+      console.error("Error fetching settings:", error);
+      return;
     }
-    return defaultHomeSettings;
-  });
 
-  const handleUpdateHomeSettings = (newSettings) => {
-    setHomeSettings(newSettings);
-    localStorage.setItem("soamour_home_settings_v3", JSON.stringify(newSettings));
+    let home = defaultHomeSettings;
+    let contact = defaultContactSettings;
+
+    if (data && data.length > 0) {
+      const homeRow = data.find(r => r.key === "home");
+      const contactRow = data.find(r => r.key === "contact");
+      if (homeRow) home = homeRow.value;
+      if (contactRow) contact = contactRow.value;
+    } else {
+      // Seed defaults
+      const { error: seedErr } = await supabase
+        .from("settings")
+        .insert([
+          { key: "home", value: defaultHomeSettings },
+          { key: "contact", value: defaultContactSettings }
+        ]);
+      if (seedErr) console.error("Error seeding settings:", seedErr);
+    }
+    setHomeSettings(home);
+    setContactSettings(contact);
   };
 
-  // 4. Contact Settings State
-  const [contactSettings, setContactSettings] = useState(() => {
-    const saved = localStorage.getItem("soamour_contact_settings_v3");
-    if (saved) {
-      try {
-        return { ...defaultContactSettings, ...JSON.parse(saved) };
-      } catch (e) {
-        console.error("Error parsing contact settings:", e);
-      }
+  // ----------------------------------------------------
+  // PRODUCTS CRUD HANDLERS
+  // ----------------------------------------------------
+  const handleAddProduct = async (productData) => {
+    const { data, error } = await supabase
+      .from("products")
+      .insert(productData)
+      .select();
+    
+    if (error) {
+      alert("Ürün eklenirken bir hata oluştu: " + error.message);
+    } else if (data) {
+      setProductsList([...productsList, data[0]]);
     }
-    return defaultContactSettings;
-  });
+  };
 
-  const handleUpdateContactSettings = (newSettings) => {
-    setContactSettings(newSettings);
-    localStorage.setItem("soamour_contact_settings_v3", JSON.stringify(newSettings));
+  const handleUpdateProduct = async (updatedProduct) => {
+    const { data, error } = await supabase
+      .from("products")
+      .update(updatedProduct)
+      .eq("id", updatedProduct.id)
+      .select();
+    
+    if (error) {
+      alert("Ürün güncellenirken bir hata oluştu: " + error.message);
+    } else if (data) {
+      setProductsList(productsList.map(p => p.id === updatedProduct.id ? data[0] : p));
+    }
+  };
+
+  const handleDeleteProduct = async (id) => {
+    const { error } = await supabase
+      .from("products")
+      .delete()
+      .eq("id", id);
+    
+    if (error) {
+      alert("Ürün silinirken bir hata oluştu: " + error.message);
+    } else {
+      setProductsList(productsList.filter(p => p.id !== id));
+    }
+  };
+
+  // ----------------------------------------------------
+  // GALLERY CRUD HANDLERS
+  // ----------------------------------------------------
+  const handleAddGallery = async (galleryData) => {
+    const dbData = {
+      title: galleryData.title,
+      description: galleryData.desc,
+      url: galleryData.url
+    };
+    
+    const { data, error } = await supabase
+      .from("gallery")
+      .insert(dbData)
+      .select();
+    
+    if (error) {
+      alert("Galeri görseli eklenirken bir hata oluştu: " + error.message);
+    } else if (data) {
+      const item = data[0];
+      setGalleryList([...galleryList, { id: item.id, title: item.title, desc: item.description, url: item.url }]);
+    }
+  };
+
+  const handleUpdateGallery = async (updatedItem) => {
+    const dbData = {
+      title: updatedItem.title,
+      description: updatedItem.desc,
+      url: updatedItem.url
+    };
+    
+    const { data, error } = await supabase
+      .from("gallery")
+      .update(dbData)
+      .eq("id", updatedItem.id)
+      .select();
+    
+    if (error) {
+      alert("Galeri görseli güncellenirken bir hata oluştu: " + error.message);
+    } else if (data) {
+      const item = data[0];
+      setGalleryList(galleryList.map(g => g.id === item.id ? { id: item.id, title: item.title, desc: item.description, url: item.url } : g));
+    }
+  };
+
+  const handleDeleteGallery = async (id) => {
+    const { error } = await supabase
+      .from("gallery")
+      .delete()
+      .eq("id", id);
+    
+    if (error) {
+      alert("Galeri görseli silinirken bir hata oluştu: " + error.message);
+    } else {
+      setGalleryList(galleryList.filter(g => g.id !== id));
+    }
+  };
+
+  // ----------------------------------------------------
+  // SETTINGS HANDLERS
+  // ----------------------------------------------------
+  const handleUpdateHomeSettings = async (newSettings) => {
+    const { error } = await supabase
+      .from("settings")
+      .upsert({ key: "home", value: newSettings });
+    
+    if (error) {
+      alert("Ayarlar kaydedilirken bir hata oluştu: " + error.message);
+    } else {
+      setHomeSettings(newSettings);
+    }
+  };
+
+  const handleUpdateContactSettings = async (newSettings) => {
+    const { error } = await supabase
+      .from("settings")
+      .upsert({ key: "contact", value: newSettings });
+    
+    if (error) {
+      alert("Ayarlar kaydedilirken bir hata oluştu: " + error.message);
+    } else {
+      setContactSettings(newSettings);
+    }
   };
 
   return (
     <Router>
       <AppContent 
         productsList={productsList}
-        handleUpdateProducts={handleUpdateProducts}
         galleryList={galleryList}
-        handleUpdateGallery={handleUpdateGallery}
         homeSettings={homeSettings}
-        handleUpdateHomeSettings={handleUpdateHomeSettings}
         contactSettings={contactSettings}
-        handleUpdateContactSettings={handleUpdateContactSettings}
+        onAddProduct={handleAddProduct}
+        onUpdateProduct={handleUpdateProduct}
+        onDeleteProduct={handleDeleteProduct}
+        onAddGallery={handleAddGallery}
+        onUpdateGallery={handleUpdateGallery}
+        onDeleteGallery={handleDeleteGallery}
+        onUpdateHomeSettings={handleUpdateHomeSettings}
+        onUpdateContactSettings={handleUpdateContactSettings}
+        isLoading={isLoading}
       />
     </Router>
   );
