@@ -48,12 +48,12 @@ export default function Testimonials() {
           </p>
         </div>
 
-        {/* Reviews Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {/* Reviews Carousel (Mobile) / Grid (Desktop) */}
+        <div className="flex md:grid md:grid-cols-3 overflow-x-auto md:overflow-x-visible snap-x snap-mandatory gap-6 scrollbar-hide pb-6">
           {reviews.map((rev) => (
             <div
               key={rev.id}
-              className="bg-[#1c0e12] border border-brand-gold/10 hover:border-brand-gold/30 p-8 rounded-3xl transition-all duration-300 flex flex-col justify-between text-left relative group hover:shadow-xl hover:shadow-brand-gold/5"
+              className="w-[85vw] md:w-auto shrink-0 snap-center bg-[#1c0e12] border border-brand-gold/10 hover:border-brand-gold/30 p-6 sm:p-8 rounded-3xl transition-all duration-300 flex flex-col justify-between text-left relative group hover:shadow-xl hover:shadow-brand-gold/5"
             >
               <Quote className="absolute top-6 right-6 text-brand-gold/10 group-hover:text-brand-gold/20 transition-colors w-12 h-12 stroke-[1.5]" />
               

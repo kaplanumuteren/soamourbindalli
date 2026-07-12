@@ -19,47 +19,39 @@ export default function ProductCard({ product }) {
   };
 
   return (
-    <div className="group relative bg-[#160B0E]/30 rounded-3xl overflow-hidden border border-brand-gold/10 hover:border-brand-gold/40 transition-all duration-500 flex flex-col h-full shadow-md hover:shadow-brand-gold/5">
+    <Link
+      to={`/urun/${id}`}
+      className="group relative bg-[#160B0E]/30 rounded-2xl sm:rounded-3xl overflow-hidden border border-brand-gold/10 hover:border-brand-gold/40 transition-all duration-500 flex flex-col h-full shadow-md hover:shadow-brand-gold/5"
+    >
       {/* Image Container */}
       <div className="relative aspect-[3/4] w-full overflow-hidden bg-[#160B0E]">
         <img
           src={image}
           alt={name}
-          className="h-full w-full object-cover object-center transform group-hover:scale-110 transition-transform duration-700 ease-out"
+          className="h-full w-full object-cover object-center transform group-hover:scale-105 transition-transform duration-700 ease-out"
           loading="lazy"
         />
-        {/* Overlay on hover */}
-        <div className="absolute inset-0 bg-[#160B0E]/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-3">
-          <Link
-            to={`/urun/${id}`}
-            className="p-3 bg-brand-gold text-[#160B0E] rounded-full hover:bg-brand-gold-light hover:scale-110 transition-all shadow-lg cursor-pointer"
-            title="Detayları Gör"
-          >
+        {/* Overlay on hover (Desktop only) */}
+        <div className="absolute inset-0 bg-[#160B0E]/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 hidden md:flex items-center justify-center gap-3">
+          <span className="p-3 bg-brand-gold text-[#160B0E] rounded-full hover:bg-brand-gold-light hover:scale-110 transition-all shadow-lg">
             <Eye size={20} />
-          </Link>
-          <Link
-            to={`/urun/${id}`}
-            className="p-3 bg-brand-burgundy text-brand-ivory border border-brand-gold/30 rounded-full hover:bg-brand-burgundy-light hover:scale-110 transition-all shadow-lg cursor-pointer"
-            title="Bilgi Al"
-          >
-            <ShoppingBag size={20} />
-          </Link>
+          </span>
         </div>
 
         {/* Badges */}
-        <div className="absolute top-4 left-4 flex flex-col gap-2">
+        <div className="absolute top-2 left-2 sm:top-4 sm:left-4 flex flex-col gap-1">
           {type === "rental" && (
-            <span className="bg-brand-burgundy text-brand-ivory text-[10px] font-sans font-bold uppercase tracking-wider px-3 py-1.5 rounded-full border border-brand-gold/20 shadow-md">
-              Sadece Kiralık
+            <span className="bg-brand-burgundy text-brand-ivory text-[8px] sm:text-[10px] font-sans font-bold uppercase tracking-wider px-2 py-1 sm:px-3 sm:py-1.5 rounded-full border border-brand-gold/20 shadow-md">
+              Kiralık
             </span>
           )}
           {type === "sale" && (
-            <span className="bg-brand-gold text-[#160B0E] text-[10px] font-sans font-bold uppercase tracking-wider px-3 py-1.5 rounded-full shadow-md">
-              Sadece Satılık
+            <span className="bg-brand-gold text-[#160B0E] text-[8px] sm:text-[10px] font-sans font-bold uppercase tracking-wider px-2 py-1 sm:px-3 sm:py-1.5 rounded-full shadow-md">
+              Satılık
             </span>
           )}
           {type === "rental-sale" && (
-            <span className="bg-gradient-to-r from-brand-burgundy to-brand-gold text-brand-ivory text-[10px] font-sans font-bold uppercase tracking-wider px-3 py-1.5 rounded-full border border-brand-gold/10 shadow-md">
+            <span className="bg-gradient-to-r from-brand-burgundy to-brand-gold text-brand-ivory text-[8px] sm:text-[10px] font-sans font-bold uppercase tracking-wider px-2 py-1 sm:px-3 sm:py-1.5 rounded-full border border-brand-gold/10 shadow-md">
               Kiralık & Satılık
             </span>
           )}
@@ -67,14 +59,14 @@ export default function ProductCard({ product }) {
       </div>
 
       {/* Info Container */}
-      <div className="p-6 flex flex-col flex-grow">
-        <span className="text-xs font-sans uppercase tracking-[0.2em] text-brand-gold/80 mb-2">
+      <div className="p-3 sm:p-6 flex flex-col flex-grow text-left">
+        <span className="text-[9px] sm:text-xs font-sans uppercase tracking-[0.2em] text-brand-gold/80 mb-1">
           {formatCategory(category)}
         </span>
-        <h3 className="font-serif text-lg sm:text-xl font-semibold text-brand-ivory hover:text-brand-gold transition-colors duration-300 line-clamp-2">
-          <Link to={`/urun/${id}`}>{name}</Link>
+        <h3 className="font-serif text-sm sm:text-lg font-semibold text-brand-ivory group-hover:text-brand-gold transition-colors duration-300 line-clamp-2">
+          {name}
         </h3>
       </div>
-    </div>
+    </Link>
   );
 }

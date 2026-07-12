@@ -116,38 +116,38 @@ export default function Home({ homeSettings, galleryImages }) {
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            <div className="relative rounded-2xl overflow-hidden aspect-[3/4] border border-brand-gold/20 group">
+          <div className="flex md:grid md:grid-cols-3 overflow-x-auto md:overflow-x-visible snap-x snap-mandatory gap-6 scrollbar-hide pb-6">
+            <div className="w-[80vw] md:w-auto shrink-0 snap-center relative rounded-2xl overflow-hidden aspect-[3/4] border border-brand-gold/20 group">
               <img
                 src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=600&q=80"
                 alt="Kaftan Koleksiyonu"
                 className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#160B0E]/90 to-transparent flex flex-col justify-end p-6">
+              <div className="absolute inset-0 bg-gradient-to-t from-[#160B0E]/90 to-transparent flex flex-col justify-end p-6 text-left">
                 <h3 className="font-serif text-xl font-bold text-brand-ivory">Kaftan & Bindallı</h3>
                 <Link to="/koleksiyon" className="text-brand-gold text-xs font-semibold mt-2 hover:underline">Modelleri Gör &rarr;</Link>
               </div>
             </div>
 
-            <div className="relative rounded-2xl overflow-hidden aspect-[3/4] border border-brand-gold/20 group">
+            <div className="w-[80vw] md:w-auto shrink-0 snap-center relative rounded-2xl overflow-hidden aspect-[3/4] border border-brand-gold/20 group">
               <img
                 src="https://images.unsplash.com/photo-1566174053879-31528523f8ae?auto=format&fit=crop&w=600&q=80"
                 alt="Kına Elbisesi Koleksiyonu"
                 className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#160B0E]/90 to-transparent flex flex-col justify-end p-6">
+              <div className="absolute inset-0 bg-gradient-to-t from-[#160B0E]/90 to-transparent flex flex-col justify-end p-6 text-left">
                 <h3 className="font-serif text-xl font-bold text-brand-ivory">Kına Elbiseleri</h3>
                 <Link to="/koleksiyon" className="text-brand-gold text-xs font-semibold mt-2 hover:underline">Modelleri Gör &rarr;</Link>
               </div>
             </div>
 
-            <div className="relative rounded-2xl overflow-hidden aspect-[3/4] border border-brand-gold/20 group">
+            <div className="w-[80vw] md:w-auto shrink-0 snap-center relative rounded-2xl overflow-hidden aspect-[3/4] border border-brand-gold/20 group">
               <img
                 src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=600&q=80"
                 alt="Aksesuar Koleksiyonu"
                 className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#160B0E]/90 to-transparent flex flex-col justify-end p-6">
+              <div className="absolute inset-0 bg-gradient-to-t from-[#160B0E]/90 to-transparent flex flex-col justify-end p-6 text-left">
                 <h3 className="font-serif text-xl font-bold text-brand-ivory">Özel Aksesuarlar</h3>
                 <Link to="/koleksiyon" className="text-brand-gold text-xs font-semibold mt-2 hover:underline">Modelleri Gör &rarr;</Link>
               </div>
