@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Menu, X, PhoneCall } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 
-export default function Navbar() {
+export default function Navbar({ contactSettings }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
@@ -63,10 +63,9 @@ export default function Navbar() {
             ))}
           </div>
 
-          {/* Desktop CTA */}
           <div className="hidden md:flex items-center">
             <a
-              href="https://wa.me/905000000000?text=Merhaba,%20hizmetleriniz%20hakkında%20bilgi%20almak%20istiyorum."
+              href={`https://wa.me/${contactSettings?.whatsapp || "905000000000"}?text=Merhaba,%20hizmetleriniz%20hakkında%20bilgi%20almak%20istiyorum.`}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 bg-brand-gold hover:bg-brand-gold-dark text-[#160B0E] font-sans font-semibold px-5 py-2.5 rounded-full shadow-md hover:shadow-brand-gold/20 hover:scale-105 transition-all text-sm tracking-wider"
@@ -112,7 +111,7 @@ export default function Navbar() {
           ))}
           <div className="pt-4 pb-2 px-3">
             <a
-              href="https://wa.me/905000000000?text=Merhaba,%20hizmetleriniz%20hakkında%20bilgi%20almak%20istiyorum."
+              href={`https://wa.me/${contactSettings?.whatsapp || "905000000000"}?text=Merhaba,%20hizmetleriniz%20hakkında%20bilgi%20almak%20istiyorum.`}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-center gap-2 w-full bg-brand-gold text-[#160B0E] font-sans font-semibold px-5 py-3 rounded-full shadow-md"

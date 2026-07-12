@@ -1,13 +1,13 @@
 import { Sparkles, ArrowRight } from "lucide-react";
 
-export default function Hero() {
+export default function Hero({ homeSettings }) {
   return (
     <div className="relative min-h-screen flex items-center justify-center bg-[#160B0E] overflow-hidden">
       {/* Background Image with Overlay */}
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-40 scale-105 transform transition-transform duration-10000"
         style={{
-          backgroundImage: `url('https://images.unsplash.com/photo-1596783074918-c84cb06531ca?auto=format&fit=crop&w=1920&q=80')`
+          backgroundImage: `url('${homeSettings?.heroBgImage || "https://images.unsplash.com/photo-1596783074918-c84cb06531ca?auto=format&fit=crop&w=1920&q=80"}')`
         }}
       />
       {/* Royal Color Gradients */}
@@ -24,20 +24,17 @@ export default function Hero() {
           {/* Tag */}
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-gold/10 border border-brand-gold/30 text-brand-gold text-xs font-semibold tracking-widest uppercase mb-6 animate-fade-in-up">
             <Sparkles size={14} />
-            Sarayların Büyüleyici Güzelliği
+            {homeSettings?.heroTag || "Sarayların Büyüleyici Güzelliği"}
           </div>
 
           {/* Heading */}
           <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-brand-ivory leading-tight mb-6 animate-fade-in-up">
-            En Özel Gününüzde <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-gold via-brand-gold-light to-brand-gold">
-              Saray İhtişamı
-            </span>
+            {homeSettings?.heroTitle || "En Özel Gününüzde Saray İhtişamı"}
           </h1>
 
           {/* Subtitle */}
           <p className="font-sans text-brand-ivory/80 text-lg sm:text-xl leading-relaxed mb-10 max-w-2xl animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-            Hayalinizdeki kına gecesi için en seçkin Kaftan & Bindallı modelleri ve büyüleyici kına elbiseleri So Amour'da.
+            {homeSettings?.heroSubtitle || "Hayalinizdeki kına gecesi için en seçkin Kaftan & Bindallı modelleri ve büyüleyici kına elbiseleri So Amour'da."}
           </p>
 
           {/* CTAs */}

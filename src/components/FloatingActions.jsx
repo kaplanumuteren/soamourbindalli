@@ -1,12 +1,16 @@
 import { Phone, MessageCircle } from "lucide-react";
 
-export default function FloatingActions() {
+export default function FloatingActions({ contactSettings }) {
+  const phoneFormatted = contactSettings?.phone
+    ? contactSettings.phone.replace(/\s+/g, "")
+    : "+905000000000";
+
   return (
     <div className="fixed bottom-6 right-6 z-50 flex flex-col gap-4">
       {/* Phone Call Floating Button */}
       <a
-        href="tel:+905000000000"
-        className="group relative flex items-center justify-center w-14 h-14 bg-brand-burgundy text-brand-gold rounded-full shadow-xl border border-brand-gold/30 hover:bg-brand-burgundy-light hover:scale-110 active:scale-95 transition-all duration-300"
+        href={`tel:${phoneFormatted}`}
+        className="group relative flex items-center justify-center w-14 h-14 bg-brand-burgundy text-brand-gold rounded-full shadow-xl border border-brand-gold/30 hover:bg-brand-burgundy-light hover:scale-110 active:scale-95 transition-all duration-300 cursor-pointer"
         aria-label="Telefonla Ara"
       >
         <Phone size={24} className="animate-pulse" />
@@ -20,10 +24,10 @@ export default function FloatingActions() {
 
       {/* WhatsApp Floating Button */}
       <a
-        href="https://wa.me/905000000000?text=Merhaba,%20kına%20ve%20bindallı%20hizmetleriniz%20hakkında%20bilgi%20almak%20istiyorum."
+        href={`https://wa.me/${contactSettings?.whatsapp || "905000000000"}?text=Merhaba,%20kına%20ve%20bindallı%20hizmetleriniz%20hakkında%20bilgi%20almak%20istiyorum.`}
         target="_blank"
         rel="noopener noreferrer"
-        className="group relative flex items-center justify-center w-14 h-14 bg-[#25D366] text-white rounded-full shadow-xl hover:bg-[#20ba5a] hover:scale-110 active:scale-95 transition-all duration-300"
+        className="group relative flex items-center justify-center w-14 h-14 bg-[#25D366] text-white rounded-full shadow-xl hover:bg-[#20ba5a] hover:scale-110 active:scale-95 transition-all duration-300 cursor-pointer"
         aria-label="WhatsApp Destek"
       >
         <MessageCircle size={26} className="fill-current" />

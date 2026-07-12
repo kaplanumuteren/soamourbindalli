@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { ArrowLeft, MessageSquare, Shield, Clock, Scissors, Award } from "lucide-react";
 
-export default function ProductDetail({ products }) {
+export default function ProductDetail({ products, contactSettings }) {
   const { id } = useParams();
   const product = products.find((p) => p.id === parseInt(id));
 
@@ -156,7 +156,7 @@ export default function ProductDetail({ products }) {
               </div>
 
               <a
-                href={`https://wa.me/905000000000?text=${encodeURIComponent(whatsappMessage)}`}
+                href={`https://wa.me/${contactSettings?.whatsapp || "905000000000"}?text=${encodeURIComponent(whatsappMessage)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-brand-gold to-brand-gold-dark hover:from-brand-gold-light hover:to-brand-gold text-[#160B0E] font-sans font-bold py-4 rounded-xl shadow-lg hover:scale-[1.02] transition-all text-sm tracking-wider uppercase"

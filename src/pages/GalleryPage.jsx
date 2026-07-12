@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import Gallery from "../components/Gallery";
 
-export default function GalleryPage() {
+export default function GalleryPage({ galleryImages = [] }) {
   // Scroll to top on page load
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -9,7 +9,7 @@ export default function GalleryPage() {
 
   return (
     <div className="pt-12 bg-[#160B0E] min-h-screen">
-      <Gallery />
+      <Gallery galleryImages={galleryImages} />
     </div>
   );
 }

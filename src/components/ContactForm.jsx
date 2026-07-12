@@ -1,20 +1,20 @@
 import { Phone, Mail, MapPin, Clock, ExternalLink } from "lucide-react";
 
-export default function ContactForm() {
+export default function ContactForm({ contactSettings }) {
   const contactDetails = [
     {
       id: 1,
       title: "Müşteri Hattı",
-      value: "+90 (500) 000 00 00",
-      link: "tel:+905000000000",
+      value: contactSettings?.phone || "+90 (500) 000 00 00",
+      link: `tel:${contactSettings?.phone ? contactSettings.phone.replace(/\s+/g, "") : "+905000000000"}`,
       actionLabel: "Hemen Ara",
       icon: <Phone size={24} />,
     },
     {
       id: 2,
       title: "WhatsApp Bilgi Hattı",
-      value: "+90 (500) 000 00 00",
-      link: "https://wa.me/905000000000?text=Merhaba,%20hizmetleriniz%20hakkında%20bilgi%20almak%20istiyorum.",
+      value: contactSettings?.phone || "+90 (500) 000 00 00",
+      link: `https://wa.me/${contactSettings?.whatsapp || "905000000000"}?text=Merhaba,%20hizmetleriniz%20hakkında%20bilgi%20almak%20istiyorum.`,
       actionLabel: "Mesaj Gönder",
       icon: (
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="fill-current">
@@ -25,16 +25,16 @@ export default function ContactForm() {
     {
       id: 3,
       title: "E-Posta Adresi",
-      value: "info@soamourbindalli.com",
-      link: "mailto:info@soamourbindalli.com",
+      value: contactSettings?.email || "info@soamourbindalli.com",
+      link: `mailto:${contactSettings?.email || "info@soamourbindalli.com"}`,
       actionLabel: "E-Posta Yaz",
       icon: <Mail size={24} />,
     },
     {
       id: 4,
       title: "Çalışma Saatleri",
-      value: "Her Gün: 10:00 - 19:30",
-      subValue: "(Randevulu Hizmet)",
+      value: contactSettings?.hours || "Her Gün: 10:00 - 19:30",
+      subValue: contactSettings?.hoursSub || "(Randevulu Hizmet)",
       icon: <Clock size={24} />,
     },
   ];
@@ -109,7 +109,7 @@ export default function ContactForm() {
               Merkez Ofis & Showroom
             </h3>
             <p className="font-sans text-brand-ivory/80 text-base leading-relaxed mb-6">
-              Kemalpaşa Mah. Bahariye Cad. No:45 Kat:1, Kadıköy / İstanbul
+              {contactSettings?.address || "Kemalpaşa Mah. Bahariye Cad. No:45 Kat:1, Kadıköy / İstanbul"}
             </p>
             <p className="font-sans text-brand-ivory/60 text-sm leading-relaxed mb-8">
               Kadıköy Rıhtım metro istasyonuna 5 dakika yürüme mesafesinde, merkezi ve kolay ulaşılabilir konumdayız. Özel aracınız ile geliyorsanız, showroom önünde otopark imkanı mevcuttur.
@@ -125,9 +125,8 @@ export default function ContactForm() {
             </a>
           </div>
 
-          {/* Interactive Map Placeholder with premium look */}
+          {/* Interactive Map */}
           <div className="lg:w-1/2 w-full aspect-video rounded-2xl overflow-hidden border border-brand-gold/20 relative group bg-[#160B0E]">
-            {/* Embedded maps placeholder or actual map iframe */}
             <iframe
               title="Showroom Konumu"
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3011.6502905391216!2d29.022934276567543!3d40.989125520935515!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14cab8677c7f3ab7%3A0xa9ffbc88cd6b7389!2sKad%C4%B1k%C3%B6y%20Bo%C4%9Fa%20Heykeli!5e0!3m2!1str!2str!4v1719230000000!5m2!1str!2str"

@@ -3,10 +3,10 @@ import Hero from "../components/Hero";
 import Gallery from "../components/Gallery";
 import { Link } from "react-router-dom";
 
-export default function Home() {
+export default function Home({ homeSettings, galleryImages }) {
   return (
     <div>
-      <Hero />
+      <Hero homeSettings={homeSettings} />
 
       {/* ================= HAKKIMIZDA SECTION ================= */}
       <section className="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative text-left">
@@ -24,7 +24,9 @@ export default function Home() {
             </div>
             {/* Experience Floating Card */}
             <div className="absolute -bottom-6 -right-6 bg-gradient-to-r from-brand-burgundy to-brand-burgundy-dark border border-brand-gold/40 p-6 rounded-2xl shadow-xl hidden sm:flex items-center gap-4">
-              <div className="text-brand-gold font-serif text-4xl font-extrabold">30+</div>
+              <div className="text-brand-gold font-serif text-4xl font-extrabold">
+                {homeSettings?.aboutYears || "30+"}
+              </div>
               <div className="text-brand-ivory text-xs font-sans font-semibold uppercase tracking-wider leading-relaxed">
                 Yıllık Sektör <br /> Tecrübesi
               </div>
@@ -37,11 +39,13 @@ export default function Home() {
               BİZ KİMİZ?
             </span>
             <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-brand-ivory mt-2 leading-tight">
-              Gecenizin Yıldızı <br /> Olmaya Hazırlanın
+              {homeSettings?.aboutTitle || "Gecenizin Yıldızı Olmaya Hazırlanın"}
             </h2>
             <div className="h-1 w-20 bg-brand-gold my-5 rounded-full" />
-            <p className="font-sans text-brand-ivory/70 text-base mb-8 leading-relaxed">
-              So Amour Kına & Bindallı olarak, kına gecelerinizin ve düğün öncesi törenlerinizin ne denli özel ve anlamlı olduğunu çok iyi biliyoruz. **30 yılı aşkın tecrübemizle**, geleneksel Türk nakışlarını ve kadifesini modern tasarım çizgileriyle harmanlıyor; her gelinimizin kendini bir saray kraliçesi gibi hissetmesini sağlıyoruz.
+            <p className="font-sans text-brand-ivory/70 text-base mb-8 leading-relaxed whitespace-pre-line">
+              {homeSettings?.aboutDesc || 
+                "So Amour Kına & Bindallı olarak, kına gecelerinizin ve düğün öncesi törenlerinizin ne denli özel ve anlamlı olduğunu çok iyi biliyoruz. 30 yılı aşkın tecrübemizle, geleneksel Türk nakışlarını ve kadifesini modern tasarım çizgileriyle harmanlıyor; her gelinimizin kendini bir saray kraliçesi gibi hissetmesini sağlıyoruz."
+              }
             </p>
 
             {/* Features Row */}
@@ -151,7 +155,7 @@ export default function Home() {
         </div>
       </section>
 
-      <Gallery />
+      <Gallery galleryImages={galleryImages} />
     </div>
   );
 }
