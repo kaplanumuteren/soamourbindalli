@@ -5,6 +5,7 @@ import {
   Clock, Info, FileText, ChevronRight, ArrowLeft
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { supabase } from "../supabaseClient";
 
 export default function Admin({ 
   products, onAddProduct, onUpdateProduct, onDeleteProduct,
@@ -746,16 +747,12 @@ export default function Admin({
                       />
                     </div>
 
-                    <div>
-                      <label className="block text-xs font-sans uppercase tracking-widest text-brand-gold mb-2">Arka Plan Görsel URL</label>
-                      <input
-                        type="text"
-                        value={homeFields.heroBgImage}
-                        onChange={(e) => setHomeFields((p) => ({ ...p, heroBgImage: e.target.value }))}
-                        placeholder="Yüksek çözünürlüklü Unsplash veya görsel linki..."
-                        className="w-full bg-[#160B0E]/60 border border-brand-gold/20 focus:border-brand-gold rounded-xl py-3 px-4 text-brand-ivory font-sans focus:outline-none transition-all"
-                      />
-                    </div>
+                    <ImageUploadField
+                      label="Arka Plan Görseli"
+                      value={homeFields.heroBgImage}
+                      onChange={(url) => setHomeFields((p) => ({ ...p, heroBgImage: url }))}
+                      placeholder="Yüksek çözünürlüklü Unsplash veya görsel linki..."
+                    />
                   </div>
                 )}
 
@@ -929,7 +926,7 @@ export default function Admin({
                 />
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div>
                   <label className="block text-xs font-sans uppercase tracking-widest text-brand-gold mb-2">Kategori</label>
                   <select
@@ -955,19 +952,14 @@ export default function Admin({
                     <option value="sale" className="bg-[#160B0E]">Sadece Satılık</option>
                   </select>
                 </div>
-
-                <div>
-                  <label className="block text-xs font-sans uppercase tracking-widest text-brand-gold mb-2">Görsel URL</label>
-                  <input
-                    type="text"
-                    required
-                    value={productFields.image}
-                    onChange={(e) => setProductFields((prev) => ({ ...prev, image: e.target.value }))}
-                    placeholder="Resim linki..."
-                    className="w-full bg-[#160B0E]/60 border border-brand-gold/20 focus:border-brand-gold rounded-xl py-3 px-4 text-brand-ivory font-sans focus:outline-none transition-all"
-                  />
-                </div>
               </div>
+
+              <ImageUploadField
+                label="Görsel"
+                value={productFields.image}
+                onChange={(url) => setProductFields((prev) => ({ ...prev, image: url }))}
+                placeholder="Görsel URL veya dosya yükleyin..."
+              />
 
 
 
@@ -1054,17 +1046,12 @@ export default function Admin({
                 />
               </div>
 
-              <div>
-                <label className="block text-xs font-sans uppercase tracking-widest text-brand-gold mb-2">Görsel URL</label>
-                <input
-                  type="text"
-                  required
-                  value={galleryFields.url}
-                  onChange={(e) => setGalleryFields((prev) => ({ ...prev, url: e.target.value }))}
-                  placeholder="Resim linki..."
-                  className="w-full bg-[#160B0E]/60 border border-brand-gold/20 focus:border-brand-gold rounded-xl py-3 px-4 text-brand-ivory font-sans focus:outline-none transition-all"
-                />
-              </div>
+              <ImageUploadField
+                label="Görsel"
+                value={galleryFields.url}
+                onChange={(url) => setGalleryFields((prev) => ({ ...prev, url: url }))}
+                placeholder="Görsel URL veya dosya yükleyin..."
+              />
 
               <div className="flex gap-4 pt-4 border-t border-brand-gold/10">
                 <button
@@ -1086,6 +1073,91 @@ export default function Admin({
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+function ImageUploadField({ label, value, onChange, placeholder }) {
+  const [uploading, setUploading] = useState(false);
+
+  const handleUpload = async (e) => {
+    try {
+      setUploading(true);
+      if (!e.target.files || e.target.files.length === 0) {
+        throw new Error("Yüklemek için bir görsel seçmelisiniz.");
+      }
+
+      const file = e.target.files[0];
+      const fileExt = file.name.split(".").pop();
+      const fileName = `${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from("images")
+        .upload(filePath, file);
+
+      if (uploadError) {
+        throw uploadError;
+      }
+
+      const { data } = supabase.storage
+        .from("images")
+        .getPublicUrl(filePath);
+
+      if (data && data.publicUrl) {
+        onChange(data.publicUrl);
+      }
+    } catch (error) {
+      alert("Görsel yüklenirken hata oluştu! Lütfen Supabase Storage panelinizde 'images' isminde, Public (herkese açık) bir bucket oluşturduğunuzdan emin olun.\\n\\nHata detayı: " + error.message);
+      console.error("Error uploading image:", error);
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  return (
+    <div className="space-y-2">
+      <label className="block text-xs font-sans uppercase tracking-widest text-brand-gold">{label}</label>
+      <div className="flex flex-col gap-2">
+        <div className="flex gap-2">
+          <input
+            type="text"
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            placeholder={placeholder || "Resim linki..."}
+            className="flex-1 bg-[#160B0E]/60 border border-brand-gold/20 focus:border-brand-gold rounded-xl py-3 px-4 text-brand-ivory font-sans focus:outline-none transition-all text-sm"
+          />
+          <label className="flex items-center justify-center bg-brand-gold hover:bg-brand-gold-light text-[#160B0E] font-sans font-bold px-4 rounded-xl cursor-pointer transition-all gap-2 text-sm shrink-0 min-w-[120px]">
+            {uploading ? (
+              <span className="animate-spin h-4 w-4 border-2 border-[#160B0E] border-t-transparent rounded-full"></span>
+            ) : (
+              <>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-upload"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
+                Yükle
+              </>
+            )}
+            <input
+              type="file"
+              accept="image/*"
+              disabled={uploading}
+              onChange={handleUpload}
+              className="hidden"
+            />
+          </label>
+        </div>
+        {value && (
+          <div className="relative group w-20 h-20 rounded-lg overflow-hidden border border-brand-gold/20 bg-black/40">
+            <img src={value} alt="Önizleme" className="w-full h-full object-cover" />
+            <button
+              type="button"
+              onClick={() => onChange("")}
+              className="absolute inset-0 bg-red-950/80 text-red-200 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-xs font-bold"
+            >
+              Kaldır
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
