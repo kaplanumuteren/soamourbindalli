@@ -1,10 +1,22 @@
 import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import ProductCard from "../components/ProductCard";
 import { Search } from "lucide-react";
 
 export default function Collection({ products }) {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [filter, setFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
+
+  // Sync state with URL parameter
+  useEffect(() => {
+    const filterParam = searchParams.get("filter");
+    if (filterParam && ["all", "rental", "sale"].includes(filterParam)) {
+      setFilter(filterParam);
+    } else {
+      setFilter("all");
+    }
+  }, [searchParams]);
 
   // Scroll to top on page load
   useEffect(() => {
@@ -13,29 +25,55 @@ export default function Collection({ products }) {
 
   // Filter & Search products
   const filteredProducts = products.filter((product) => {
-    const matchesCategory = filter === "all" || product.category === filter;
+    const matchesFilter =
+      filter === "all" ||
+      (filter === "rental" && (product.type === "rental" || product.type === "rental-sale")) ||
+      (filter === "sale" && (product.type === "sale" || product.type === "rental-sale"));
     const matchesSearch =
       product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       product.description.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesCategory && matchesSearch;
+    return matchesFilter && matchesSearch;
   });
 
   return (
     <div className="pt-28 pb-24 bg-[#160B0E] min-h-screen text-left">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Page Header */}
-        <div className="mb-12 border-b border-brand-gold/10 pb-8 flex flex-col md:flex-row md:items-end justify-between gap-6">
-          <div>
-            <span className="text-brand-gold text-sm font-sans uppercase tracking-[0.2em] font-semibold">
-              SO AMOUR KOLEKSİYONU
-            </span>
-            <h1 className="font-serif text-4xl sm:text-5xl font-bold text-brand-ivory mt-2">
-              Koleksiyonumuz
-            </h1>
-            <p className="font-sans text-brand-ivory/60 text-sm mt-2 max-w-xl">
-              Hayalinizdeki kına gecesi için kiralık ve satılık özel tasarım kaftanlar, bindallılar, göz alıcı elbiseler ve tamamlayıcı aksesuarlar.
-            </p>
+        {/* Centered Page Header */}
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <span className="text-brand-gold text-sm font-sans uppercase tracking-[0.2em] font-semibold">
+            SO AMOUR KOLEKSİYONU
+          </span>
+          <h1 className="font-serif text-4xl sm:text-5xl font-bold text-brand-ivory mt-2">
+            Koleksiyonumuz
+          </h1>
+          <div className="h-1 w-20 bg-brand-gold mx-auto mt-4 rounded-full" />
+          <p className="font-sans text-brand-ivory/60 text-sm mt-4">
+            Hayalinizdeki kına gecesi için kiralık ve satılık özel tasarım lüks bindallılarımız.
+          </p>
+        </div>
+
+        {/* Controls Row (Filters + Search) */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10 border-b border-brand-gold/10 pb-8">
+          {/* Filtering Tabs */}
+          <div className="flex flex-wrap items-center gap-3">
+            {[
+              { id: "all", name: "Tümü" },
+              { id: "rental", name: "Kiralık" },
+              { id: "sale", name: "Satılık" },
+            ].map((btn) => (
+              <button
+                key={btn.id}
+                onClick={() => setSearchParams({ filter: btn.id })}
+                className={`font-sans font-medium text-xs tracking-wider px-5 py-3 rounded-full transition-all cursor-pointer border ${
+                  filter === btn.id
+                    ? "bg-brand-gold text-[#160B0E] border-brand-gold shadow-md shadow-brand-gold/10"
+                    : "bg-[#160B0E]/30 text-brand-ivory border-brand-gold/20 hover:border-brand-gold/50"
+                }`}
+              >
+                {btn.name}
+              </button>
+            ))}
           </div>
 
           {/* Search Input */}
@@ -49,28 +87,6 @@ export default function Collection({ products }) {
             />
             <Search size={18} className="absolute left-3.5 top-1/2 transform -translate-y-1/2 text-brand-gold/60" />
           </div>
-        </div>
-
-        {/* Filtering Tabs */}
-        <div className="flex flex-wrap items-center gap-3 mb-10">
-          {[
-            { id: "all", name: "Tüm Koleksiyon" },
-            { id: "kaftan", name: "Kaftan & Bindallı" },
-            { id: "dress", name: "Kına Elbiseleri" },
-            { id: "accessory", name: "Aksesuarlar" },
-          ].map((btn) => (
-            <button
-              key={btn.id}
-              onClick={() => setFilter(btn.id)}
-              className={`font-sans font-medium text-xs tracking-wider px-5 py-3 rounded-full transition-all cursor-pointer border ${
-                filter === btn.id
-                  ? "bg-brand-gold text-[#160B0E] border-brand-gold shadow-md shadow-brand-gold/10"
-                  : "bg-[#160B0E]/30 text-brand-ivory border-brand-gold/20 hover:border-brand-gold/50"
-              }`}
-            >
-              {btn.name}
-            </button>
-          ))}
         </div>
 
         {/* Grid Area */}

@@ -11,6 +11,7 @@ import ProductDetail from "./pages/ProductDetail";
 import GalleryPage from "./pages/GalleryPage";
 import Contact from "./pages/Contact";
 import Admin from "./pages/Admin";
+import About from "./pages/About";
 
 // Supabase Client
 import { supabase } from "./supabaseClient";
@@ -33,6 +34,10 @@ function AppContent({
   onDeleteGallery,
   onUpdateHomeSettings,
   onUpdateContactSettings,
+  testimonialsList,
+  onAddTestimonial,
+  onUpdateTestimonial,
+  onDeleteTestimonial,
   isLoading
 }) {
   const location = useLocation();
@@ -57,7 +62,11 @@ function AppContent({
         <Routes>
           <Route 
             path="/" 
-            element={<Home homeSettings={homeSettings} galleryImages={galleryList} />} 
+            element={<Home homeSettings={homeSettings} galleryImages={galleryList} testimonials={testimonialsList} />} 
+          />
+          <Route 
+            path="/hakkimizda" 
+            element={<About homeSettings={homeSettings} />} 
           />
           <Route 
             path="/koleksiyon" 
@@ -69,7 +78,19 @@ function AppContent({
           />
           <Route 
             path="/galeri" 
-            element={<GalleryPage galleryImages={galleryList} />} 
+            element={
+              <GalleryPage 
+                galleryImages={testimonialsList
+                  .filter((t) => t.image)
+                  .map((t) => ({
+                    id: t.id,
+                    url: t.image,
+                    title: t.name,
+                    desc: `${t.model || "Bindallı"} - ${t.date || ""}`
+                  }))
+                } 
+              />
+            } 
           />
           <Route 
             path="/iletisim" 
@@ -91,6 +112,10 @@ function AppContent({
                 onUpdateHomeSettings={onUpdateHomeSettings}
                 contactSettings={contactSettings}
                 onUpdateContactSettings={onUpdateContactSettings}
+                testimonials={testimonialsList}
+                onAddTestimonial={onAddTestimonial}
+                onUpdateTestimonial={onUpdateTestimonial}
+                onDeleteTestimonial={onDeleteTestimonial}
               />
             } 
           />
@@ -108,6 +133,7 @@ function App() {
   const [galleryList, setGalleryList] = useState([]);
   const [homeSettings, setHomeSettings] = useState(defaultHomeSettings);
   const [contactSettings, setContactSettings] = useState(defaultContactSettings);
+  const [testimonialsList, setTestimonialsList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   // Fetch and Sync Supabase Data
@@ -141,18 +167,7 @@ function App() {
       return;
     }
 
-    if (data && data.length > 0) {
-      setProductsList(data);
-    } else {
-      // Seed default products
-      const { data: inserted, error: insertErr } = await supabase
-        .from("products")
-        .insert(products)
-        .select();
-      
-      if (insertErr) console.error("Error seeding products:", insertErr);
-      else if (inserted) setProductsList(inserted);
-    }
+    setProductsList(data || []);
   };
 
   // 2. Fetch Gallery
@@ -167,38 +182,13 @@ function App() {
       return;
     }
 
-    if (data && data.length > 0) {
-      const formatted = data.map(item => ({
-        id: item.id,
-        title: item.title,
-        desc: item.description,
-        url: item.url
-      }));
-      setGalleryList(formatted);
-    } else {
-      // Seed default gallery
-      const mappedDefaults = galleryImages.map(item => ({
-        title: item.title,
-        description: item.desc,
-        url: item.url
-      }));
-      
-      const { data: inserted, error: insertErr } = await supabase
-        .from("gallery")
-        .insert(mappedDefaults)
-        .select();
-      
-      if (insertErr) console.error("Error seeding gallery:", insertErr);
-      else if (inserted) {
-        const formatted = inserted.map(item => ({
-          id: item.id,
-          title: item.title,
-          desc: item.description,
-          url: item.url
-        }));
-        setGalleryList(formatted);
-      }
-    }
+    const formatted = (data || []).map(item => ({
+      id: item.id,
+      title: item.title,
+      desc: item.description,
+      url: item.url
+    }));
+    setGalleryList(formatted);
   };
 
   // 3. Fetch Settings
@@ -214,24 +204,39 @@ function App() {
 
     let home = defaultHomeSettings;
     let contact = defaultContactSettings;
+    let testimonials = [];
 
     if (data && data.length > 0) {
       const homeRow = data.find(r => r.key === "home");
       const contactRow = data.find(r => r.key === "contact");
-      if (homeRow) home = homeRow.value;
-      if (contactRow) contact = contactRow.value;
+      const testimonialsRow = data.find(r => r.key === "testimonials");
+      
+      if (homeRow) home = { ...defaultHomeSettings, ...homeRow.value };
+      if (contactRow) contact = { ...defaultContactSettings, ...contactRow.value };
+      
+      if (testimonialsRow) {
+        testimonials = testimonialsRow.value;
+      } else {
+        // Seed testimonials row in existing settings table
+        const { error: seedErr } = await supabase
+          .from("settings")
+          .insert({ key: "testimonials", value: testimonials });
+        if (seedErr) console.error("Error seeding testimonials:", seedErr);
+      }
     } else {
-      // Seed defaults
+      // Seed all defaults
       const { error: seedErr } = await supabase
         .from("settings")
         .insert([
           { key: "home", value: defaultHomeSettings },
-          { key: "contact", value: defaultContactSettings }
+          { key: "contact", value: defaultContactSettings },
+          { key: "testimonials", value: testimonials }
         ]);
       if (seedErr) console.error("Error seeding settings:", seedErr);
     }
     setHomeSettings(home);
     setContactSettings(contact);
+    setTestimonialsList(testimonials);
   };
 
   // ----------------------------------------------------
@@ -361,6 +366,37 @@ function App() {
     }
   };
 
+  // ----------------------------------------------------
+  // TESTIMONIALS CRUD HANDLERS
+  // ----------------------------------------------------
+  const handleUpdateTestimonials = async (newTestimonials) => {
+    const { error } = await supabase
+      .from("settings")
+      .upsert({ key: "testimonials", value: newTestimonials });
+    
+    if (error) {
+      alert("Yorumlar kaydedilirken bir hata oluştu: " + error.message);
+    } else {
+      setTestimonialsList(newTestimonials);
+    }
+  };
+
+  const handleAddTestimonial = (testimonialData) => {
+    const newId = testimonialsList.length > 0 ? Math.max(...testimonialsList.map(t => t.id)) + 1 : 1;
+    const updatedList = [...testimonialsList, { ...testimonialData, id: newId }];
+    handleUpdateTestimonials(updatedList);
+  };
+
+  const handleUpdateTestimonial = (updatedTestimonial) => {
+    const updatedList = testimonialsList.map(t => t.id === updatedTestimonial.id ? updatedTestimonial : t);
+    handleUpdateTestimonials(updatedList);
+  };
+
+  const handleDeleteTestimonial = (id) => {
+    const updatedList = testimonialsList.filter(t => t.id !== id);
+    handleUpdateTestimonials(updatedList);
+  };
+
   return (
     <Router>
       <AppContent 
@@ -368,6 +404,7 @@ function App() {
         galleryList={galleryList}
         homeSettings={homeSettings}
         contactSettings={contactSettings}
+        testimonialsList={testimonialsList}
         onAddProduct={handleAddProduct}
         onUpdateProduct={handleUpdateProduct}
         onDeleteProduct={handleDeleteProduct}
@@ -376,6 +413,9 @@ function App() {
         onDeleteGallery={handleDeleteGallery}
         onUpdateHomeSettings={handleUpdateHomeSettings}
         onUpdateContactSettings={handleUpdateContactSettings}
+        onAddTestimonial={handleAddTestimonial}
+        onUpdateTestimonial={handleUpdateTestimonial}
+        onDeleteTestimonial={handleDeleteTestimonial}
         isLoading={isLoading}
       />
     </Router>

@@ -8,7 +8,7 @@ export default function ProductCard({ product }) {
   const formatCategory = (cat) => {
     switch (cat) {
       case "kaftan":
-        return "Kaftan & Bindallı";
+        return "Bindallı";
       case "dress":
         return "Kına Elbisesi";
       case "accessory":

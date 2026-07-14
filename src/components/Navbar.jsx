@@ -21,6 +21,7 @@ export default function Navbar({ contactSettings }) {
 
   const navLinks = [
     { name: "Ana Sayfa", href: "/" },
+    { name: "Hakkımızda", href: "/hakkimizda" },
     { name: "Koleksiyon", href: "/koleksiyon" },
     { name: "Galeri", href: "/galeri" },
     { name: "İletişim", href: "/iletisim" },
@@ -42,7 +43,7 @@ export default function Navbar({ contactSettings }) {
               SO AMOUR
             </Link>
             <span className="font-sans text-[9px] uppercase tracking-[0.3em] text-brand-ivory/80 -mt-1">
-              Kına & Bindallı
+              Bindallı
             </span>
           </div>
 

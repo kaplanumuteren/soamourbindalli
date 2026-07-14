@@ -9,7 +9,7 @@ export default function GalleryPage({ galleryImages = [] }) {
 
   return (
     <div className="pt-12 bg-[#160B0E] min-h-screen">
-      <Gallery galleryImages={galleryImages} />
+      <Gallery galleryImages={galleryImages} showRedirectButton={false} limitImages={false} />
     </div>
   );
 }

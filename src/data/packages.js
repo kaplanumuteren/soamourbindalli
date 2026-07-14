@@ -42,7 +42,7 @@ export const packages = [
       "Ultra VIP Saray Kına Tahtı, Cibinlik & Büyük Şamdanlar",
       "6 Kişilik Profesyonel Dansçı Nedime Ekibi",
       "Kişiye Özel Konsept Giriş Gösterisi (Meşaleli & Yelpazeli)",
-      "Gelin için 1 Adet VIP Kaftan & 1 Adet Kına Elbisesi",
+      "Gelin için 2 Farklı Konsept VIP Kaftan Seçeneği",
       "Karşılamada Lokum, Kına Şerbeti & Makaron İkramı",
       "Sınırsız Kuru Kına ve Hediyelik Kına Dağıtımı",
       "Canlı Darbuka & Perküsyon Show",

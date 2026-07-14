@@ -1,18 +1,21 @@
 import { useState, useEffect } from "react";
 import { X, ZoomIn, ChevronLeft, ChevronRight } from "lucide-react";
+import { Link } from "react-router-dom";
 
-export default function Gallery({ galleryImages = [] }) {
+export default function Gallery({ galleryImages = [], showRedirectButton = true, limitImages = true }) {
   const [activeIndex, setActiveIndex] = useState(null);
+
+  const displayedImages = limitImages ? galleryImages.slice(0, 6) : galleryImages;
 
   // Navigate functions
   const handlePrev = (e) => {
     e?.stopPropagation();
-    setActiveIndex((prev) => (prev === 0 ? galleryImages.length - 1 : prev - 1));
+    setActiveIndex((prev) => (prev === 0 ? displayedImages.length - 1 : prev - 1));
   };
 
   const handleNext = (e) => {
     e?.stopPropagation();
-    setActiveIndex((prev) => (prev === galleryImages.length - 1 ? 0 : prev + 1));
+    setActiveIndex((prev) => (prev === displayedImages.length - 1 ? 0 : prev + 1));
   };
 
   // Keyboard navigation
@@ -29,7 +32,7 @@ export default function Gallery({ galleryImages = [] }) {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [activeIndex]);
 
-  const activeImage = activeIndex !== null ? galleryImages[activeIndex] : null;
+  const activeImage = activeIndex !== null ? displayedImages[activeIndex] : null;
 
   return (
     <section id="galeri" className="py-24 bg-[#160B0E]/20 relative">
@@ -49,12 +52,12 @@ export default function Gallery({ galleryImages = [] }) {
         </div>
 
         {/* Gallery Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {galleryImages.map((img, index) => (
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
+          {displayedImages.map((img, index) => (
             <div
               key={img.id}
               onClick={() => setActiveIndex(index)}
-              className="group relative aspect-[4/3] rounded-3xl overflow-hidden cursor-pointer border border-brand-gold/10 hover:border-brand-gold/30 shadow-md transition-all duration-300"
+              className="group relative aspect-[4/3] rounded-2xl md:rounded-3xl overflow-hidden cursor-pointer border border-brand-gold/10 hover:border-brand-gold/30 shadow-md transition-all duration-300"
             >
               <img
                 src={img.url}
@@ -63,16 +66,28 @@ export default function Gallery({ galleryImages = [] }) {
                 loading="lazy"
               />
               {/* Overlay */}
-              <div className="absolute inset-0 bg-[#160B0E]/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
-                <div className="absolute top-6 right-6 p-2 bg-brand-gold/10 rounded-full text-brand-gold border border-brand-gold/20">
-                  <ZoomIn size={20} />
+              <div className="absolute inset-0 bg-[#160B0E]/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-3 md:p-6">
+                <div className="absolute top-2 right-2 md:top-6 md:right-6 p-1.5 md:p-2 bg-brand-gold/10 rounded-full text-brand-gold border border-brand-gold/20">
+                  <ZoomIn className="w-4 h-4 md:w-5 md:h-5" />
                 </div>
-                <h3 className="font-serif text-lg font-bold text-brand-ivory">{img.title}</h3>
-                <p className="font-sans text-xs text-brand-gold mt-1">{img.desc}</p>
+                <h3 className="font-serif text-xs md:text-lg font-bold text-brand-ivory">{img.title}</h3>
+                <p className="font-sans text-[9px] md:text-xs text-brand-gold mt-0.5 md:mt-1">{img.desc}</p>
               </div>
             </div>
           ))}
         </div>
+
+        {/* View More Button */}
+        {showRedirectButton && (
+          <div className="text-center mt-12">
+            <Link
+              to="/galeri"
+              className="inline-flex items-center gap-2 border border-brand-gold/30 hover:border-brand-gold text-brand-gold hover:bg-brand-gold hover:text-[#160B0E] font-sans font-bold px-8 py-3.5 rounded-full transition-all text-xs uppercase tracking-wider cursor-pointer shadow-lg hover:shadow-brand-gold/10 hover:scale-105"
+            >
+              Tüm Galeriyi Gör
+            </Link>
+          </div>
+        )}
       </div>
 
       {/* Lightbox Modal with Slider Navigation */}

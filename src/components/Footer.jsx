@@ -50,7 +50,7 @@ export default function Footer() {
               SO AMOUR
             </a>
             <p className="font-sans text-[10px] uppercase tracking-[0.3em] text-brand-ivory/80 -mt-1 mb-6">
-              Kına & Bindallı
+              Bindallı
             </p>
             <p className="font-sans text-brand-ivory/60 text-sm leading-relaxed max-w-sm mb-6">
               Geleneksel motifleri modern tasarım çizgileriyle buluşturarak, hayatınızın en anlamlı gecesinde sizi bir kraliçe gibi hissettiriyoruz.
@@ -87,61 +87,62 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Quick Links */}
-          <div>
-            <h3 className="font-serif text-lg font-bold text-brand-ivory mb-6 border-l-2 border-brand-gold pl-3">
-              Hızlı Linkler
-            </h3>
-            <ul className="space-y-3 font-sans text-sm">
-              <li>
-                <Link to="/" className="text-brand-ivory/60 hover:text-brand-gold transition-colors">
-                  Ana Sayfa
-                </Link>
-              </li>
-              <li>
-                <Link to="/koleksiyon" className="text-brand-ivory/60 hover:text-brand-gold transition-colors">
-                  Koleksiyonumuz
-                </Link>
-              </li>
-              <li>
-                <Link to="/galeri" className="text-brand-ivory/60 hover:text-brand-gold transition-colors">
-                  Galeri
-                </Link>
-              </li>
-              <li>
-                <Link to="/iletisim" className="text-brand-ivory/60 hover:text-brand-gold transition-colors">
-                  İletişim & Randevu
-                </Link>
-              </li>
-            </ul>
-          </div>
+          {/* Quick Links & Services Symmetrical Wrapper */}
+          <div className="grid grid-cols-2 gap-6 md:col-span-2">
+            {/* Quick Links */}
+            <div>
+              <h3 className="font-serif text-lg font-bold text-brand-ivory mb-6 border-l-2 border-brand-gold pl-3">
+                Hızlı Linkler
+              </h3>
+              <ul className="space-y-3 font-sans text-sm">
+                <li>
+                  <Link to="/" className="text-brand-ivory/60 hover:text-brand-gold transition-colors">
+                    Ana Sayfa
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/hakkimizda" className="text-brand-ivory/60 hover:text-brand-gold transition-colors">
+                    Hakkımızda
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/koleksiyon" className="text-brand-ivory/60 hover:text-brand-gold transition-colors">
+                    Koleksiyonumuz
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/galeri" className="text-brand-ivory/60 hover:text-brand-gold transition-colors">
+                    Galeri
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/iletisim" className="text-brand-ivory/60 hover:text-brand-gold transition-colors">
+                    İletişim & Randevu
+                  </Link>
+                </li>
+              </ul>
+            </div>
 
-          {/* Business Info */}
-          <div>
-            <h3 className="font-serif text-lg font-bold text-brand-ivory mb-6 border-l-2 border-brand-gold pl-3">
-              Hizmetlerimiz
-            </h3>
-            <ul className="space-y-3 font-sans text-sm text-brand-ivory/60">
-              <li>Lüks Kaftan Kiralama</li>
-              <li>Bindallı Satışı & Dikimi</li>
-              <li>Özel Kına Elbisesi Tasarımı</li>
-              <li>Terzilik & Ölçüye Özel Tadilat</li>
-              <li>Özel Taç ve Duvak Tasarımı</li>
-              <li>Kiralama ve Satış Danışmanlığı</li>
-            </ul>
+            {/* Business Info */}
+            <div>
+              <h3 className="font-serif text-lg font-bold text-brand-ivory mb-6 border-l-2 border-brand-gold pl-3">
+                Hizmetlerimiz
+              </h3>
+              <ul className="space-y-3 font-sans text-sm text-brand-ivory/60">
+                <li>Lüks Bindallı Kiralama</li>
+                <li>Özel Ölçü Bindallı Satışı</li>
+                <li>Terzilik & Özel Tadilat</li>
+                <li>Kiralama & Satış Danışmanlığı</li>
+              </ul>
+            </div>
           </div>
         </div>
 
         {/* Divider */}
         <div className="border-t border-brand-gold/10 pt-8 mt-12 flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="font-sans text-brand-ivory/40 text-xs text-center sm:text-left">
-            &copy; {new Date().getFullYear()} So Amour Kına & Bindallı. Tüm Hakları Saklıdır.
+            &copy; {new Date().getFullYear()} So Amour Bindallı. Tüm Hakları Saklıdır.
           </p>
-          <div className="flex gap-6 font-sans text-brand-ivory/40 text-xs">
-            <a href="#" className="hover:text-brand-gold transition-colors">Gizlilik Politikası</a>
-            <a href="#" className="hover:text-brand-gold transition-colors">Kullanım Şartları</a>
-            <Link to="/admin" className="hover:text-brand-gold transition-colors text-brand-gold/60 font-semibold">Yönetici Girişi</Link>
-          </div>
           <button
             onClick={scrollToTop}
             className="p-3 bg-brand-gold/10 hover:bg-brand-gold text-brand-gold hover:text-[#160B0E] rounded-full border border-brand-gold/20 transition-all group"

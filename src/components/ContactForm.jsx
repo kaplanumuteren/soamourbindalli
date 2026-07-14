@@ -52,7 +52,7 @@ export default function ContactForm({ contactSettings }) {
             İLETİŞİM & RANDEVU
           </span>
           <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-brand-ivory mt-2">
-            Showroom'umuza Davetlisiniz
+            Mağazamıza Davetlisiniz
           </h2>
           <div className="h-1 w-20 bg-brand-gold mx-auto mt-4 rounded-full" />
           <p className="font-sans text-brand-ivory/60 text-base mt-4">
@@ -106,13 +106,13 @@ export default function ContactForm({ contactSettings }) {
               <MapPin size={24} />
             </div>
             <h3 className="font-serif text-xl sm:text-2xl font-bold text-brand-ivory mb-3">
-              Merkez Ofis & Showroom
+              Merkez Mağazamız
             </h3>
             <p className="font-sans text-brand-ivory/80 text-base leading-relaxed mb-6">
               {contactSettings?.address || "Akdeniz, Mimar Kemalettin Cd. No:71/B, 35210 Konak/İzmir (Mimar Kemalettin İş Mer.)"}
             </p>
             <p className="font-sans text-brand-ivory/60 text-sm leading-relaxed mb-8">
-              Mimar Kemalettin İş Merkezi konumunda, İzmir Konak'ın en merkezi moda ve gelinlik caddesinde yer almaktayız. Toplu taşıma (metro, tramvay ve otobüs) ile kolaylıkla ulaşabilir, showroom'umuzu ziyaret edebilirsiniz.
+              Mimar Kemalettin İş Merkezi konumunda, İzmir Konak'ın en merkezi moda ve gelinlik caddesinde yer almaktayız. Toplu taşıma (metro, tramvay ve otobüs) ile kolaylıkla ulaşabilir, mağazamızı ziyaret edebilirsiniz.
             </p>
             <a
               href="https://maps.google.com/?q=So+Amour+Bindall%C4%B1"
@@ -128,7 +128,7 @@ export default function ContactForm({ contactSettings }) {
           {/* Interactive Map */}
           <div className="lg:w-1/2 w-full aspect-video rounded-2xl overflow-hidden border border-brand-gold/20 relative group bg-[#160B0E]">
             <iframe
-              title="Showroom Konumu"
+              title="Mağaza Konumu"
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3125.7875694362415!2d27.13298287633421!3d38.42327387453948!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14bbd9592a5bd593%3A0x32570b67c0c5e9!2sSo%20Amour%20Bindall%C4%B1!5e0!3m2!1str!2str!4v1783875955738!5m2!1str!2str"
               width="100%"
               height="100%"

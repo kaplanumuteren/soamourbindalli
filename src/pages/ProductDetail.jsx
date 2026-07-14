@@ -32,7 +32,7 @@ export default function ProductDetail({ products, contactSettings }) {
   const formatCategory = (cat) => {
     switch (cat) {
       case "kaftan":
-        return "Kaftan & Bindallı";
+        return "Bindallı";
       case "dress":
         return "Kına Elbisesi";
       case "accessory":
@@ -177,7 +177,7 @@ export default function ProductDetail({ products, contactSettings }) {
             </div>
             <div>
               <h4 className="font-serif font-bold text-brand-ivory text-sm uppercase tracking-wide">Kuru Temizleme Dahil</h4>
-              <p className="font-sans text-brand-ivory/60 text-xs mt-1">Kiraladığınız tüm kıyafetlerin kuru temizlemesi bize aittir.</p>
+              <p className="font-sans text-brand-ivory/60 text-xs mt-1">Kiraladığınız tüm kaftanların kuru temizlemesi bize aittir.</p>
             </div>
           </div>
 
@@ -187,7 +187,7 @@ export default function ProductDetail({ products, contactSettings }) {
             </div>
             <div>
               <h4 className="font-serif font-bold text-brand-ivory text-sm uppercase tracking-wide">Hijyen & Kalite Garantisi</h4>
-              <p className="font-sans text-brand-ivory/60 text-xs mt-1">Her gelin için elbiseler titizlikle sterilize edilip hazırlanır.</p>
+              <p className="font-sans text-brand-ivory/60 text-xs mt-1">Her gelin için kaftanlar titizlikle sterilize edilip hazırlanır.</p>
             </div>
           </div>
         </div>
