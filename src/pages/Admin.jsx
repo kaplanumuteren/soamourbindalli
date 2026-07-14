@@ -7,6 +7,17 @@ import {
 import { Link } from "react-router-dom";
 import { supabase } from "../supabaseClient";
 
+const getDisplayImage = (img) => {
+  if (!img) return "";
+  if (typeof img === "string" && img.trim().startsWith("[")) {
+    try {
+      const parsed = JSON.parse(img);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed[0];
+    } catch (e) {}
+  }
+  return img;
+};
+
 export default function Admin({ 
   products, onAddProduct, onUpdateProduct, onDeleteProduct,
   gallery, onAddGallery, onUpdateGallery, onDeleteGallery,
@@ -42,6 +53,7 @@ export default function Admin({
     type: "rental-sale",
     description: "",
     image: "",
+    images: [],
     features: ""
   });
 
@@ -146,7 +158,8 @@ export default function Admin({
       category: "kaftan",
       type: "rental-sale",
       description: "",
-      image: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=600&q=80",
+      image: "",
+      images: [],
       features: ""
     });
     setShowProductModal(true);
@@ -154,12 +167,24 @@ export default function Admin({
 
   const handleEditProductClick = (product) => {
     setEditingProduct(product);
+    let imgs = [];
+    if (product.image) {
+      if (typeof product.image === "string" && product.image.trim().startsWith("[")) {
+        try {
+          const parsed = JSON.parse(product.image);
+          if (Array.isArray(parsed)) imgs = parsed;
+        } catch (e) {}
+      } else {
+        imgs = [product.image];
+      }
+    }
     setProductFields({
       name: product.name,
       category: product.category,
       type: product.type,
       description: product.description || "",
       image: product.image || "",
+      images: imgs,
       features: product.features ? product.features.join(", ") : ""
     });
     setShowProductModal(true);
@@ -173,8 +198,8 @@ export default function Admin({
 
   const handleSaveProduct = (e) => {
     e.preventDefault();
-    if (!productFields.name || !productFields.image) {
-      alert("Lütfen ürün adı ve görsel URL alanlarını doldurun.");
+    if (!productFields.name || !productFields.images || productFields.images.length === 0) {
+      alert("Lütfen ürün adı ekleyin ve en az bir görsel yükleyin.");
       return;
     }
 
@@ -184,10 +209,10 @@ export default function Admin({
 
     const productData = {
       name: productFields.name,
-      category: "kaftan",
+      category: productFields.category || "kaftan",
       type: productFields.type,
       description: productFields.description,
-      image: productFields.image,
+      image: JSON.stringify(productFields.images),
       features: formattedFeatures
     };
 
@@ -626,7 +651,7 @@ export default function Admin({
                   <div key={p.id} className="bg-[#1c0e12] border border-brand-gold/10 hover:border-brand-gold/20 p-4 rounded-2xl flex items-center justify-between gap-4">
                     <div className="flex items-center gap-4">
                       <img
-                        src={p.image}
+                        src={getDisplayImage(p.image)}
                         alt={p.name}
                         className="w-12 h-16 object-cover rounded-lg border border-brand-gold/20 shrink-0"
                       />
@@ -674,7 +699,7 @@ export default function Admin({
                       <tr key={p.id} className="hover:bg-[#160B0E]/60 transition-colors">
                         <td className="px-6 py-4 flex items-center gap-4">
                           <img
-                            src={p.image}
+                            src={getDisplayImage(p.image)}
                             alt={p.name}
                             className="w-10 h-12 object-cover rounded-lg border border-brand-gold/20"
                           />
@@ -1277,11 +1302,10 @@ export default function Admin({
                   </select>
                 </div>
 
-                <ImageUploadField
-                  label="Görsel"
-                  value={productFields.image}
-                  onChange={(url) => setProductFields((prev) => ({ ...prev, image: url }))}
-                  placeholder="Görsel URL veya dosya yükleyin..."
+                <MultipleImageUploadField
+                  label="Görseller"
+                  images={productFields.images}
+                  onChange={(urls) => setProductFields((prev) => ({ ...prev, images: urls }))}
                 />
 
                 <div>
@@ -1606,6 +1630,154 @@ function ImageUploadField({ label, value, onChange, placeholder }) {
             </button>
           </div>
         )}
+      </div>
+    </div>
+  );
+}
+
+function MultipleImageUploadField({ label, images = [], onChange }) {
+  const [uploading, setUploading] = useState(false);
+  const [newUrl, setNewUrl] = useState("");
+
+  const handleUpload = async (e) => {
+    try {
+      setUploading(true);
+      if (!e.target.files || e.target.files.length === 0) return;
+
+      const files = Array.from(e.target.files);
+      const uploadedUrls = [];
+
+      for (const file of files) {
+        const fileExt = file.name.split(".").pop();
+        const fileName = `${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`;
+        const filePath = `${fileName}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from("images")
+          .upload(filePath, file);
+
+        if (uploadError) throw uploadError;
+
+        const { data } = supabase.storage
+          .from("images")
+          .getPublicUrl(filePath);
+
+        if (data && data.publicUrl) {
+          uploadedUrls.push(data.publicUrl);
+        }
+      }
+
+      onChange([...images, ...uploadedUrls]);
+    } catch (error) {
+      alert("Görseller yüklenirken hata oluştu! Hata detayı: " + error.message);
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleAddUrl = () => {
+    if (newUrl.trim()) {
+      onChange([...images, newUrl.trim()]);
+      setNewUrl("");
+    }
+  };
+
+  const handleRemoveImage = (index) => {
+    onChange(images.filter((_, i) => i !== index));
+  };
+
+  const handleMakeMain = (index) => {
+    if (index === 0) return;
+    const newImages = [...images];
+    const [selected] = newImages.splice(index, 1);
+    newImages.unshift(selected);
+    onChange(newImages);
+  };
+
+  return (
+    <div className="space-y-4">
+      <label className="block text-xs font-sans uppercase tracking-widest text-brand-gold">{label}</label>
+      
+      {/* Existing Images Thumbnails */}
+      {images.length > 0 && (
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 bg-[#160B0E]/40 border border-brand-gold/15 p-4 rounded-2xl">
+          {images.map((img, index) => (
+            <div key={index} className="relative group aspect-[3/4] rounded-xl overflow-hidden border border-brand-gold/20 bg-black/40 flex flex-col justify-between">
+              <img src={img} alt={`Görsel ${index + 1}`} className="w-full h-full object-cover" />
+              
+              {/* Main image badge */}
+              {index === 0 ? (
+                <div className="absolute top-2 left-2 bg-brand-gold text-[#160B0E] text-[9px] font-sans font-bold uppercase tracking-wider px-2 py-0.5 rounded shadow-md">
+                  Ana Görsel
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => handleMakeMain(index)}
+                  className="absolute top-2 left-2 bg-black/75 hover:bg-brand-gold hover:text-[#160B0E] text-brand-gold text-[9px] font-sans font-bold uppercase tracking-wider px-2 py-0.5 rounded shadow-md transition-all opacity-0 group-hover:opacity-100 cursor-pointer"
+                >
+                  Ana Yap
+                </button>
+              )}
+
+              {/* Remove button */}
+              <button
+                type="button"
+                onClick={() => handleRemoveImage(index)}
+                className="absolute top-2 right-2 bg-brand-burgundy text-brand-ivory text-[9px] font-sans font-bold uppercase tracking-wider px-2 py-0.5 rounded shadow-md hover:bg-red-750 transition-all opacity-0 group-hover:opacity-100 cursor-pointer"
+              >
+                Kaldır
+              </button>
+              
+              {/* Index indicator */}
+              <div className="absolute bottom-2 right-2 bg-black/60 text-brand-ivory/80 text-[10px] px-1.5 py-0.5 rounded-md font-sans">
+                {index + 1}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Add New Image Area */}
+      <div className="flex flex-col gap-2">
+        <div className="flex gap-2">
+          <input
+            type="text"
+            value={newUrl}
+            onChange={(e) => setNewUrl(e.target.value)}
+            placeholder="Yeni görsel URL'si ekleyin..."
+            className="flex-1 bg-[#160B0E]/60 border border-brand-gold/20 focus:border-brand-gold rounded-xl py-3 px-4 text-brand-ivory font-sans focus:outline-none transition-all text-sm"
+          />
+          <button
+            type="button"
+            onClick={handleAddUrl}
+            className="bg-[#160B0E]/60 border border-brand-gold/20 hover:border-brand-gold text-brand-gold font-sans font-bold px-4 rounded-xl cursor-pointer transition-all text-sm shrink-0 min-w-[80px]"
+          >
+            Ekle
+          </button>
+          
+          <label className="flex items-center justify-center bg-brand-gold hover:bg-brand-gold-light text-[#160B0E] font-sans font-bold px-4 rounded-xl cursor-pointer transition-all gap-2 text-sm shrink-0 min-w-[120px]">
+            {uploading ? (
+              <span className="animate-spin h-4 w-4 border-2 border-[#160B0E] border-t-transparent rounded-full"></span>
+            ) : (
+              <>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
+                Dosya Yükle
+              </>
+            )}
+            <input
+              type="file"
+              accept="image/*"
+              multiple
+              disabled={uploading}
+              onChange={handleUpload}
+              className="hidden"
+            />
+          </label>
+        </div>
+        <p className="text-[10px] text-brand-ivory/40 italic pl-1">
+          * Birden fazla görsel seçerek toplu olarak da yükleyebilirsiniz. İlk görsel otomatik olarak ana kapak görseli olur.
+        </p>
       </div>
     </div>
   );

@@ -1,14 +1,16 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { ArrowLeft, MessageSquare, Shield, Clock, Scissors, Award } from "lucide-react";
 
 export default function ProductDetail({ products, contactSettings }) {
   const { id } = useParams();
   const product = products.find((p) => p.id === parseInt(id));
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
 
   // Scroll to top when loading product detail
   useEffect(() => {
     window.scrollTo(0, 0);
+    setActiveImageIndex(0);
   }, [id]);
 
   if (!product) {
@@ -28,6 +30,25 @@ export default function ProductDetail({ products, contactSettings }) {
   }
 
   const { name, category, type, description, image, features } = product;
+
+  // Parse images if stored as JSON string, fallback to single image
+  let images = [];
+  if (image) {
+    if (typeof image === "string" && image.trim().startsWith("[")) {
+      try {
+        images = JSON.parse(image);
+      } catch (e) {
+        images = [image];
+      }
+    } else if (Array.isArray(image)) {
+      images = image;
+    } else {
+      images = [image];
+    }
+  }
+  if (images.length === 0) {
+    images = ["https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=600&q=80"];
+  }
 
   const formatCategory = (cat) => {
     switch (cat) {
@@ -74,14 +95,33 @@ export default function ProductDetail({ products, contactSettings }) {
 
         {/* Product Info Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-16">
-          {/* Left Column: Image */}
-          <div className="lg:col-span-6">
+          {/* Left Column: Image Gallery */}
+          <div className="lg:col-span-6 space-y-4">
             <div className="relative aspect-[3/4] rounded-3xl overflow-hidden border border-brand-gold/20 bg-[#160B0E]/50 shadow-2xl">
               <img
-                src={image}
-                alt={name}
+                src={images[activeImageIndex]}
+                alt={`${name} - ${activeImageIndex + 1}`}
                 className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700"
               />
+              
+              {/* Navigation Arrows (Only show if multiple images exist) */}
+              {images.length > 1 && (
+                <>
+                  <button
+                    onClick={() => setActiveImageIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1))}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/65 hover:bg-brand-gold text-brand-ivory hover:text-[#160B0E] border border-brand-gold/25 hover:border-brand-gold flex items-center justify-center transition-all cursor-pointer shadow-lg"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                  </button>
+                  <button
+                    onClick={() => setActiveImageIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1))}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/65 hover:bg-brand-gold text-brand-ivory hover:text-[#160B0E] border border-brand-gold/25 hover:border-brand-gold flex items-center justify-center transition-all cursor-pointer shadow-lg"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                  </button>
+                </>
+              )}
+
               {/* Badges */}
               <div className="absolute top-4 left-4">
                 {type === "rental" && (
@@ -101,6 +141,25 @@ export default function ProductDetail({ products, contactSettings }) {
                 )}
               </div>
             </div>
+
+            {/* Thumbnail Navigation (Only show if multiple images exist) */}
+            {images.length > 1 && (
+              <div className="flex gap-3 overflow-x-auto py-2 scrollbar-thin scrollbar-thumb-brand-gold/20 scrollbar-track-transparent">
+                {images.map((img, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setActiveImageIndex(idx)}
+                    className={`relative w-20 h-24 rounded-xl overflow-hidden border-2 transition-all shrink-0 cursor-pointer ${
+                      activeImageIndex === idx
+                        ? "border-brand-gold scale-[1.03] shadow-md shadow-brand-gold/10"
+                        : "border-brand-gold/25 hover:border-brand-gold/60"
+                    }`}
+                  >
+                    <img src={img} alt={`Küçük görsel ${idx + 1}`} className="w-full h-full object-cover" />
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Right Column: Details */}

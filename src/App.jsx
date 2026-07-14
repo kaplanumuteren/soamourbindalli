@@ -256,10 +256,11 @@ function App() {
   };
 
   const handleUpdateProduct = async (updatedProduct) => {
+    const { id, ...fieldsToUpdate } = updatedProduct;
     const { data, error } = await supabase
       .from("products")
-      .update(updatedProduct)
-      .eq("id", updatedProduct.id)
+      .update(fieldsToUpdate)
+      .eq("id", id)
       .select();
     
     if (error) {

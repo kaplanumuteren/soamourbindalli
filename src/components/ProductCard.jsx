@@ -4,6 +4,17 @@ import { Link } from "react-router-dom";
 export default function ProductCard({ product }) {
   const { id, name, category, type, image } = product;
 
+  const getDisplayImage = (img) => {
+    if (!img) return "https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=600&q=80";
+    if (typeof img === "string" && img.trim().startsWith("[")) {
+      try {
+        const parsed = JSON.parse(img);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed[0];
+      } catch (e) {}
+    }
+    return img;
+  };
+
   // Format category name for Turkish user-facing UI
   const formatCategory = (cat) => {
     switch (cat) {
@@ -26,7 +37,7 @@ export default function ProductCard({ product }) {
       {/* Image Container */}
       <div className="relative aspect-[3/4] w-full overflow-hidden bg-[#160B0E]">
         <img
-          src={image}
+          src={getDisplayImage(image)}
           alt={name}
           className="h-full w-full object-cover object-center transform group-hover:scale-105 transition-transform duration-700 ease-out"
           loading="lazy"
