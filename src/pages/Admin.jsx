@@ -1172,7 +1172,7 @@ export default function Admin({
                           type="text"
                           value={contactFields.phone}
                           onChange={(e) => setContactFields((p) => ({ ...p, phone: e.target.value }))}
-                          placeholder="Örn. +90 (500) 000 00 00"
+                          placeholder="Örn. 0507 717 91 13"
                           className="w-full bg-[#160B0E]/60 border border-brand-gold/20 focus:border-brand-gold rounded-xl py-3 px-4 text-brand-ivory font-sans focus:outline-none transition-all"
                         />
                       </div>
@@ -1182,7 +1182,7 @@ export default function Admin({
                           type="text"
                           value={contactFields.whatsapp}
                           onChange={(e) => setContactFields((p) => ({ ...p, whatsapp: e.target.value }))}
-                          placeholder="Örn. 905000000000"
+                          placeholder="Örn. 905077179113"
                           className="w-full bg-[#160B0E]/60 border border-brand-gold/20 focus:border-brand-gold rounded-xl py-3 px-4 text-brand-ivory font-sans focus:outline-none transition-all"
                         />
                       </div>

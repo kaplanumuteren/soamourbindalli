@@ -19,7 +19,7 @@ const InstagramIcon = ({ size = 18 }) => (
   </svg>
 );
 
-const FacebookIcon = ({ size = 18 }) => (
+const WhatsAppIcon = ({ size = 18 }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width={size}
@@ -30,12 +30,13 @@ const FacebookIcon = ({ size = 18 }) => (
     strokeWidth="2"
     strokeLinecap="round"
     strokeLinejoin="round"
+    className="fill-current"
   >
-    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
   </svg>
 );
 
-export default function Footer() {
+export default function Footer({ contactSettings }) {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -58,7 +59,7 @@ export default function Footer() {
             {/* Social Icons */}
             <div className="flex gap-4">
               <a
-                href="https://instagram.com"
+                href="https://www.instagram.com/soamourbindalli/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-2.5 bg-brand-gold/10 hover:bg-brand-gold text-brand-gold hover:text-[#160B0E] rounded-full border border-brand-gold/20 transition-all"
@@ -67,22 +68,13 @@ export default function Footer() {
                 <InstagramIcon size={18} />
               </a>
               <a
-                href="https://facebook.com"
+                href={`https://wa.me/${contactSettings?.whatsapp || "905077179113"}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-2.5 bg-brand-gold/10 hover:bg-brand-gold text-brand-gold hover:text-[#160B0E] rounded-full border border-brand-gold/20 transition-all"
-                title="Facebook"
+                title="WhatsApp"
               >
-                <FacebookIcon size={18} />
-              </a>
-              <a
-                href="https://pinterest.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2.5 bg-brand-gold/10 hover:bg-brand-gold text-brand-gold hover:text-[#160B0E] rounded-full border border-brand-gold/20 transition-all"
-                title="Pinterest"
-              >
-                <Compass size={18} />
+                <WhatsAppIcon size={18} />
               </a>
             </div>
           </div>

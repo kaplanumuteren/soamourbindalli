@@ -3,7 +3,7 @@ import { Phone, MessageCircle } from "lucide-react";
 export default function FloatingActions({ contactSettings }) {
   const phoneFormatted = contactSettings?.phone
     ? contactSettings.phone.replace(/\s+/g, "")
-    : "+905000000000";
+    : "905077179113";
 
   return (
     <>
@@ -27,7 +27,7 @@ export default function FloatingActions({ contactSettings }) {
       {/* WhatsApp Floating Button (Bottom Right) */}
       <div className="fixed bottom-6 right-6 z-50">
         <a
-          href={`https://wa.me/${contactSettings?.whatsapp || "905000000000"}?text=Merhaba,%20kına%20ve%20bindallı%20hizmetleriniz%20hakkında%20bilgi%20almak%20istiyorum.`}
+          href={`https://wa.me/${contactSettings?.whatsapp || "905077179113"}?text=Merhaba,%20kına%20ve%20bindallı%20hizmetleriniz%20hakkında%20bilgi%20almak%20istiyorum.`}
           target="_blank"
           rel="noopener noreferrer"
           className="group relative flex items-center justify-center w-14 h-14 bg-[#25D366] text-white rounded-full shadow-xl hover:bg-[#20ba5a] hover:scale-110 active:scale-95 transition-all duration-300 cursor-pointer"

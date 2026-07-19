@@ -66,7 +66,7 @@ function AppContent({
           />
           <Route 
             path="/hakkimizda" 
-            element={<About homeSettings={homeSettings} />} 
+            element={<About homeSettings={homeSettings} contactSettings={contactSettings} />} 
           />
           <Route 
             path="/koleksiyon" 
@@ -122,7 +122,7 @@ function AppContent({
         </Routes>
       </div>
       
-      {!isAdminPage && <Footer />}
+      {!isAdminPage && <Footer contactSettings={contactSettings} />}
       {!isAdminPage && <FloatingActions contactSettings={contactSettings} />}
     </div>
   );

@@ -1,6 +1,6 @@
 import { Check, Star, MessageSquare } from "lucide-react";
 
-export default function PackageCard({ pkg }) {
+export default function PackageCard({ pkg, contactSettings }) {
   const { name, price, popular, description, features } = pkg;
 
   return (
@@ -52,7 +52,7 @@ export default function PackageCard({ pkg }) {
 
       {/* CTA Button */}
       <a
-        href={`https://wa.me/905000000000?text=Merhaba,%20"${name}"%20organizasyon%20paketiniz%20hakkında%20görüşmek%20istiyorum.`}
+        href={`https://wa.me/${contactSettings?.whatsapp || "905077179113"}?text=Merhaba,%20"${name}"%20organizasyon%20paketiniz%20hakkında%20görüşmek%20istiyorum.`}
         target="_blank"
         rel="noopener noreferrer"
         className={`w-full flex items-center justify-center gap-2 font-sans font-bold py-3.5 px-6 rounded-xl transition-all tracking-wider text-sm ${

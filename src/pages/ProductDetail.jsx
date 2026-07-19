@@ -196,7 +196,7 @@ export default function ProductDetail({ products, contactSettings }) {
             {/* WhatsApp Action */}
             <div className="bg-[#160B0E]/40 border border-brand-gold/15 rounded-3xl p-6 sm:p-8 shadow-xl mt-auto">
               <a
-                href={`https://wa.me/${contactSettings?.whatsapp || "905000000000"}?text=${encodeURIComponent(whatsappMessage)}`}
+                href={`https://wa.me/${contactSettings?.whatsapp || "905077179113"}?text=${encodeURIComponent(whatsappMessage)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-brand-gold to-brand-gold-dark hover:from-brand-gold-light hover:to-brand-gold text-[#160B0E] font-sans font-bold py-4 rounded-xl shadow-lg hover:scale-[1.02] transition-all text-sm tracking-wider uppercase cursor-pointer"

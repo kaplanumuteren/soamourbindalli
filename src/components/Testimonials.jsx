@@ -7,8 +7,6 @@ export default function Testimonials({ reviews = [] }) {
   const [isPaused, setIsPaused] = useState(false);
   const timeoutRef = useRef(null);
 
-  if (!reviews || reviews.length === 0) return null;
-
   // Group size based on viewport width
   const [itemsPerView, setItemsPerView] = useState(3);
 
@@ -58,6 +56,8 @@ export default function Testimonials({ reviews = [] }) {
   const handleNext = () => {
     setCurrentIndex((prev) => (prev >= maxIndex ? 0 : prev + 1));
   };
+
+  if (!reviews || reviews.length === 0) return null;
 
   return (
     <section className="py-24 bg-[#160B0E] relative overflow-hidden border-t border-brand-gold/10 text-left">

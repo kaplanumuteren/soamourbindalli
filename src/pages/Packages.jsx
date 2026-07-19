@@ -3,7 +3,7 @@ import PackageCard from "../components/PackageCard";
 import { packages } from "../data/packages";
 import { Sparkles, Calendar, Heart, ShieldCheck } from "lucide-react";
 
-export default function Packages() {
+export default function Packages({ contactSettings }) {
   // Scroll to top on page load
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -29,7 +29,7 @@ export default function Packages() {
         {/* Packages Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch mb-20">
           {packages.map((pkg) => (
-            <PackageCard key={pkg.id} pkg={pkg} />
+            <PackageCard key={pkg.id} pkg={pkg} contactSettings={contactSettings} />
           ))}
         </div>
 
@@ -76,7 +76,7 @@ export default function Packages() {
             {/* Custom CTA */}
             <div className="lg:col-span-4 text-center lg:text-right w-full">
               <a
-                href="https://wa.me/905000000000?text=Merhaba,%20kişiye%20özel%20kına%20konsepti%20tasarımı%20hakkında%20bilgi%20almak%20istiyorum."
+                href={`https://wa.me/${contactSettings?.whatsapp || "905077179113"}?text=Merhaba,%20kişiye%20özel%20kına%20konsepti%20tasarımı%20hakkında%20bilgi%20almak%20istiyorum.`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 bg-brand-gold hover:bg-brand-gold-dark text-[#160B0E] font-sans font-bold px-8 py-4 rounded-xl shadow-lg hover:scale-105 transition-all text-sm tracking-wider uppercase w-full sm:w-auto justify-center"

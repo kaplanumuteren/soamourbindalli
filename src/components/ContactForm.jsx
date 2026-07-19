@@ -5,16 +5,16 @@ export default function ContactForm({ contactSettings }) {
     {
       id: 1,
       title: "Müşteri Hattı",
-      value: contactSettings?.phone || "+90 (500) 000 00 00",
-      link: `tel:${contactSettings?.phone ? contactSettings.phone.replace(/\s+/g, "") : "+905000000000"}`,
+      value: contactSettings?.phone || "0507 717 91 13",
+      link: `tel:${contactSettings?.phone ? contactSettings.phone.replace(/\s+/g, "") : "905077179113"}`,
       actionLabel: "Hemen Ara",
       icon: <Phone size={24} />,
     },
     {
       id: 2,
       title: "WhatsApp Bilgi Hattı",
-      value: contactSettings?.phone || "+90 (500) 000 00 00",
-      link: `https://wa.me/${contactSettings?.whatsapp || "905000000000"}?text=Merhaba,%20hizmetleriniz%20hakkında%20bilgi%20almak%20istiyorum.`,
+      value: contactSettings?.phone || "0507 717 91 13",
+      link: `https://wa.me/${contactSettings?.whatsapp || "905077179113"}?text=Merhaba,%20hizmetleriniz%20hakkında%20bilgi%20almak%20istiyorum.`,
       actionLabel: "Mesaj Gönder",
       icon: (
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="fill-current">
@@ -33,8 +33,8 @@ export default function ContactForm({ contactSettings }) {
     {
       id: 4,
       title: "Çalışma Saatleri",
-      value: contactSettings?.hours || "Her Gün: 10:00 - 19:30",
-      subValue: contactSettings?.hoursSub || "(Randevulu Hizmet)",
+      value: contactSettings?.hours || "Pazartesi - Cumartesi: 08:30 - 19:30",
+      subValue: contactSettings?.hoursSub || "(Pazar Günleri Kapalıdır)",
       icon: <Clock size={24} />,
     },
   ];

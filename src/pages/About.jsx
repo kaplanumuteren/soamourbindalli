@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Star, ShieldCheck, Heart, Award, ChevronRight, PhoneCall } from "lucide-react";
 import { Link } from "react-router-dom";
 
-export default function About({ homeSettings }) {
+export default function About({ homeSettings, contactSettings }) {
   // Scroll to top on mount
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -154,7 +154,7 @@ export default function About({ homeSettings }) {
             <ChevronRight size={16} />
           </Link>
           <a
-            href="https://wa.me/905000000000?text=Merhaba,%20bindalli%20modelleri%20ve%20randevu%20hakkinda%20bilgi%20almak%20istiyorum."
+            href={`https://wa.me/${contactSettings?.whatsapp || "905077179113"}?text=Merhaba,%20bindalli%20modelleri%20ve%20randevu%20hakkinda%20bilgi%20almak%20istiyorum.`}
             target="_blank"
             rel="noopener noreferrer"
             className="w-full sm:w-auto inline-flex items-center justify-center gap-2 border border-brand-gold/30 hover:border-brand-gold text-brand-gold hover:bg-brand-gold hover:text-[#160B0E] font-sans font-bold px-8 py-4 rounded-full transition-all text-xs uppercase tracking-wider cursor-pointer"
